@@ -1,0 +1,133 @@
+<ul class="site-nav list--inline {{ nav_alignment }}" id="SiteNav">
+  {% for link in linklists[section.settings.main_linklist].links %}
+    {% comment %}
+      Check if third-level nav exists on each parent link.
+    {% endcomment %}
+    {%- assign three_level_nav = false -%}
+    {%- assign child_list_handle = link.title | handleize -%}
+
+    {% if linklists[child_list_handle].links != blank %}
+      {% for childlink in linklists[child_list_handle].links %}
+        {% assign grand_child_list_handle = childlink.title | handleize %}
+        {% if linklists[grand_child_list_handle].links != blank %}
+          {%- assign three_level_nav = true -%}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+
+    {% if linklists[child_list_handle].links != blank %}
+      <li class="site-nav--has-dropdown sub-nav{% if three_level_nav %} site-nav--has-centered-dropdown{% endif %}{% if link.active %} site-nav--active{% endif %}" aria-has-popup="true" aria-controls="SiteNavLabel-{{ child_list_handle }}">
+        <span href="{{ link.url }}" class="site-nav__link site-nav__link--main">
+          {{ linklists[child_list_handle].title }}
+          {% comment %}
+          {% include 'icon-chevron-down' %}
+          {% endcomment %}
+          <span class="visually-hidden">{{ 'layout.navigation.expand' | t }}</span>
+        </span>
+
+        <div class="site-nav__dropdown{% if three_level_nav %} site-nav__dropdown--centered{% endif %}{% unless three_level_nav %} dropdow_width{% endunless %}" id="SiteNavLabel-{{ child_list_handle }}" aria-expanded="false">
+          {% if three_level_nav %}
+            <div class="site-nav__childlist grid__item medium-up--five-tenths grid_nav_{{ linklists[child_list_handle].title }}">
+             
+              <div class="site-nav__childlist-grid nav_{{ linklists[child_list_handle].title }}">
+                {% if linklists[child_list_handle].links != blank %}                
+                {% for childlink in linklists[child_list_handle].links %}
+                {% assign grand_child_list_handle = childlink.title | handle %}
+                {% if linklists[grand_child_list_handle].links != blank %}
+                <div class="site-nav__childlist-item">
+                  <a href="{{ childlink.url }}" data-collsnlink="{{childlink.title | handleize}}" class="hover-collection site-nav__link site-nav__child-link site-nav__child-link--parent">{{ linklists[grand_child_list_handle].title | escape }}</a>
+                  <ul>
+                    {% for grandchildlink in linklists[grand_child_list_handle].links %}
+
+                    <li class="hover-collection" data-collsnlink="{{grandchildlink.title | handleize}}">
+                      <a href="{{ grandchildlink.url }}" class="site-nav__link site-nav__child-link">{{ grandchildlink.title | escape }}</a>
+                    </li>
+
+                    {% endfor %}
+                  </ul>
+                </div>
+                {% else %}
+                <div class="site-nav__childlist-item_1">
+                <a href="{{ childlink.url }}" data-collsnlink="{{childlink.title | handleize}}" class="hover-collection site-nav__link site-nav__child-link site-nav__child-link--parent site-nav_block">{{ childlink.title | escape }}</a>
+                </div>
+                 {% cycle link.handle: '', '', '<div class="site-nav__childlist-item"></div>' %}
+                  {% endif %}
+                {% endfor %}
+                
+                {% endif %}
+                </div>
+                          
+            </div>
+          {% if linklists[child_list_handle].links != blank %}
+
+          {% for childlink in linklists[child_list_handle].links %}
+          {% assign grand_child_list_handle = childlink.title | handle %}
+          
+          {% if childlink.type == 'collection_link' %}
+          {% assign collection = childlink.object %}     
+
+          {%- assign max_height = 400 -%}
+          {%- assign grid_item_width = 'small--one-half medium-up--one-third' -%}
+          {% if collection.products_count > 0 %}
+          <div class="Product_collection grid__item medium-up--five-tenths" {% unless forloop.first %}style="display:none;"{% endunless %} data-collsnlink="{{childlink.title | handleize}}">
+            {% for product in collection.products limit: 3 %}
+            <div class="grid__item grid__item--{{section.id}} {{ grid_item_width }} padd_left_right text-center">
+              {% include 'product-card-grid', max_height: max_height %}
+            </div>            
+            {% endfor %}
+          </div>
+          {% endif %}
+          {% endif %}
+          {% if linklists[child_list_handle].title == 'Community' %}
+          {% if forloop.first == true %}
+           <div class="page-collection grid__item medium-up--five-tenths" {% unless forloop.first %}style="display:none;"{% endunless %} data-collsnlink="{{childlink.title | handleize}}">
+            
+            <div class="grid__item grid__item--{{section.id}} {{ grid_item_width }} padd_left_right text-center">
+              {% include 'page-card-grid', max_height: max_height %}
+            </div>            
+            
+          </div>
+          {% endif %}
+          {% endif %}
+          
+          {% if linklists[grand_child_list_handle].links != blank %}
+          {% for grandchildlink in linklists[grand_child_list_handle].links %}
+          {% if grandchildlink.type == 'collection_link' %}
+          {% assign collection = grandchildlink.object %}     
+
+          {%- assign max_height = 400 -%}
+          {%- assign grid_item_width = 'small--one-half medium-up--one-third' -%}
+          {% if collection.products_count > 0 %}
+          <div class="Product_collection grid__item medium-up--five-tenths" data-collsnlink="{{grandchildlink.title | handleize}}" style="display:none;">
+            {% for product in collection.products limit: 3 %}
+            <div class="grid__item grid__item--{{section.id}} {{ grid_item_width }} padd_left_right text-center">
+              {% include 'product-card-grid', max_height: max_height %}
+            </div>            
+            {% endfor %}
+          </div>
+          {% endif %}
+          {% endif %}
+          	{% endfor %}
+          {% endif %}
+          
+          {% endfor %}
+
+          {% endif %}
+          {% else %}
+            <ul>
+              {% for childlink in linklists[child_list_handle].links %}
+                <li {% if childlink.active %}class="site-nav--active"{% endif %}>
+                  <a href="{{ childlink.url }}" data-collsnlink="{{childlink.title | handleize}}" class="hover-collection site-nav__link site-nav__child-link{% if forloop.last %} site-nav__link--last{% endif %}">{{ childlink.title | escape }}</a>
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+      </li>
+    {% else %}
+      <li class="sub-nav {% if link.active %}site-nav--active{% endif %}">
+        <a href="{{ link.url }}" class="site-nav__link site-nav__link--main">{{ link.title }}</a>
+      </li>
+    {% endif %}
+  {% endfor %}
+</ul>

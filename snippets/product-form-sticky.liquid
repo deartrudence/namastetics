@@ -1,0 +1,47 @@
+<form action="/cart/add" method="post" enctype="multipart/form-data" class="product-form product-form-{{ section.id }}{% unless section.settings.show_variant_labels %} product-form--hide-variant-labels{% endunless %}" data-section="{{ section.id }}">
+  {% unless product.options.size == 1 and product.variants[0].title == 'Default Title' %}
+  {% for option in product.options_with_values %}
+  <div class="selector-wrapper js product-form__item prooption_{{forloop.index}}">
+    <label {% if option.name == 'default' %}class="label--hidden" {% endif %}for="SingleOptionSelector-{{ forloop.index0 }}">
+      {{ option.name }}
+    </label>
+    <select class="single-option-selector single-option-selector-{{ section.id }} product-form__input" id="SingleOptionSelector-1{{ forloop.index0 }}" data-index="option{{ forloop.index }}">
+      {% for value in option.values %}
+      <option value="{{ value | escape }}"{% if option.selected_value == value %} selected="selected"{% endif %}>{{ value }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  {% endfor %}
+  {% endunless %}
+
+  <select name="id" id="ProductSelect-{{ section.id }}" data-section="{{ section.id }}" class="ProductSelect-{{ section.id }} product-form__variants no-js">
+    {% for variant in product.variants %}
+    {% if variant.available %}
+    <option {% if variant == product.selected_or_first_available_variant %} selected="selected" {% endif %} value="{{ variant.id }}">
+      {{ variant.title }}
+    </option>
+    {% else %}
+    <option disabled="disabled">{{ variant.title }} - {{ 'products.product.sold_out' | t }}</option>
+    {% endif %}
+    {% endfor %}
+  </select>
+
+  {% if section.settings.show_quantity_selector %}
+  <div class="product-form__item product-form__item--quantity">
+    <label for="Quantity">{{ 'products.product.quantity' | t }}</label>
+    <input type="number" id="Quantity" name="quantity" value="1" min="1" class="product-form__input" pattern="[0-9]*">
+  </div>
+  {% endif %}
+
+  <div class="product-form__item product-form__item--submit">
+    <button type="submit" name="add" id="AddToCart-{{ section.id }}" {% unless current_variant.available %}disabled="disabled"{% endunless %} class="btn AddToCart-{{ section.id }} product-form__cart-submit{% if product.options.size == 1 and product.variants[0].title == 'Default Title' %} product-form__cart-submit--small{% endif %}">
+      <span id="AddToCartText-{{ section.id }}" class="AddToCartText-{{ section.id }}">
+        {% unless current_variant.available %}
+        {{ 'products.product.sold_out' | t }}
+        {% else %}
+        {{ 'products.product.add_to_cart' | t }}
+        {% endunless %}
+      </span>
+    </button>
+  </div>
+</form>

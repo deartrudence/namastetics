@@ -1,0 +1,94 @@
+<!-- <div id='accordion-2' class="accordion"> 
+  {% for i in (1..5) %}
+	{% capture filter %}filter_{{i}}_enabled{% endcapture %}
+	{% capture filter_label %}filter_{{i}}_label{% endcapture %}
+	{% capture filter_item %}filter_{{i}}_items{% endcapture %}
+	
+    {% assign filter_item = settings[filter_item] | replace: ', ', ',' %}
+	{% assign filter_item = filter_item | downcase %}
+  	{% assign tags = filter_item | split: ',' %}
+     {% if settings[filter] %}
+	{% assign current_tag_string = '' %}
+	{% assign current_tags_handle = current_tags |  handleize %}
+ 
+  {% for current_tag in current_tags %} 
+	
+  	{% assign current_tag_handle = current_tag |  handleize %}
+	{% if current_tag_string == '' %}
+	 {% assign current_tag_string = current_tag_string | append: current_tag_handle %}
+	
+	{% else %}
+    {% assign current_tag_string = current_tag_string | append:',' | append: current_tag_handle %}
+	{% endif %}  
+  {% endfor %}
+  
+	
+ <h3 class="accordion-title {% for tag in tags %} 
+     {% assign filter_handle = tag |  handleize %}
+        {% if current_tags_handle contains filter_handle %} active {% endif %} 
+            {% assign current_tag_string = current_tag_string | replace: filter_handle, '' %}
+            {% assign current_tag_string = current_tag_string | replace: ',,', ',' %}
+            {% endfor %} "  >{{ settings[filter_label] }} </h3>
+   <div class="accordion-content">
+     {% for tag in tags %}
+     
+     {% assign filter_handle = tag |  handleize %}
+     <span {% if current_tags_handle contains filter_handle  %} class="active" {% endif %}> 
+      	{% assign current_tag_array = current_tag_string | split: ',' %}
+		 <a href="{{ shop.url }}/collections/{{collection.handle}}/{% for current_filter in current_tag_array %}{% if current_filter != '' %}{{ current_filter }}+{% endif %}{% endfor %}{% if filter_handle != 'all' %}{{ filter_handle }}{% endif %}">
+            {% if current_tags_handle contains filter_handle  %}
+              <li class="active-filter">{{ tag }}</li>
+            {% else %}
+              <li>{{ tag }}</li>
+            {% endif %}
+  		 </a>
+       </span>
+     {% endfor %}
+     
+     
+   </div>
+       {% endif %}
+  {% endfor %}
+
+  </div>
+     
+<script>
+ // jquery by mangita
+$(document).ready(function($) {
+    $( ".accordion" ).accordion({
+      collapsible: true,
+     active: 'none'
+    });
+  $('.accordion-title.active').click();
+   });
+</script>  -->
+
+
+<ul class="subnav clearfix">
+  <li{% unless current_tags %} class="active"{% endunless %}>
+    {% if collection.handle %}
+     <a href="{{ shop.url }}/collections/{{collection.handle}}/{% for current_filter in current_tag_array %}{% if current_filter != '' %}{{ current_filter }}+{% endif %}{% endfor %}{% if filter_handle != 'all' %}{{ filter_handle }}{% endif %}">
+            {% if current_tags_handle contains filter_handle  %}
+              <li class="active-filter">{{ tag }}</li>
+            {% else %}
+              <li>{{ tag }}</li>
+            {% endif %}
+  		 </a>
+    {% elsif collection.current_type %}
+    <a href="{{ collection.current_type | url_for_type | sort_by: collection.sort_by }}">All</a>
+    {% elsif collection.current_vendor %}
+    <a href="{{ collection.current_vendor | url_for_vendor | sort_by: collection.sort_by }}">All</a>
+    {% endif %}
+  </li>
+  {% for tag in collection.all_tags %}
+  {% if current_tags contains tag %}
+  <li class="active">
+    {{ tag | link_to_remove_tag: tag }}
+  </li>
+  {% else %}
+  <li>
+    {{ tag | link_to_tag: tag }}
+  </li>
+  {% endif %}
+  {% endfor %}
+</ul>

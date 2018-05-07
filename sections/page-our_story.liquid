@@ -1,0 +1,111 @@
+<div class="top-banner">
+{% if  section.settings.image-banner  %}  
+<img src="{{ section.settings.image-banner | img_url }}">
+  {% else %}
+  <div class="set-pad medium-up--hide pad-top-20  small--hide">
+    <h1 class="page-title">{{ page.title }}</h1>
+    {% if section.settings.banner_txt != blank %}
+    <h5>{{ section.settings.banner_txt }}</h5>
+    {% endif %}
+  </div>
+  <div class="bck-clr"></div>
+  {% endif %}
+  <div class="row page__title grid__item medium-up--five-sixths medium-up--push-one-twelfth">
+    <h1 class="page-title">{{ page.title }}</h1>
+    {% if section.settings.banner_txt != blank %}
+    <h5>{{ section.settings.banner_txt }}</h5>
+    {% endif %}
+  </div>
+</div>
+
+  <div class="grid">
+    <div class="grid__item medium-up--five-sixths medium-up--push-one-twelfth set-font">
+<!--       <div class="section-header text-center">
+        <h1>{{ page.title }}</h1>
+      </div> -->
+
+      <div class="rte set-pad-25">
+        {{ page.content }}
+      </div>
+    </div>
+  </div>
+{% for block in section.blocks %}
+
+<div class="top-banner1">
+    {% if block.settings.image == blank %}
+    <div class="bck-clr1"></div>
+    {% else %}
+    <img src="{{ block.settings.image-banner | img_url }}">  
+    {% endif %} 
+    <div class="gallery-width">
+      <div class="tbl">
+        <div class="tbl-cell">
+          <div class="set-pad pad-top-20 row page__title grid__item medium-up--one-third {% cycle 'medium-up--push-one-twelfth','medium-up--push-one-half' %}">
+            {% if block.settings.title != blank %}
+            <h1 class="page-title">{{ block.settings.title }}</h1>
+            {% endif  %}
+            {% if block.settings.text-para != blank %}
+            <p>{{ block.settings.text-para }}</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+{% endfor %}
+{% schema %}
+   {
+    "name": "Our Story Page",
+    "class": "index-section",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "image-banner",
+        "label": "Image"
+      },
+      {
+        "type": "text",
+        "id": "banner_txt",
+        "label": "Banner Text"
+      },
+      {
+        "type": "header",
+        "content": "Title"
+      },
+	  {
+		"type": "text",
+        "id": "title",
+        "label": "Title"
+	  }
+    ],
+	"blocks": [
+      {
+        "type": "image",
+        "name": "Image slide",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+		  {
+            "type": "text",
+            "id": "title",
+            "label": "Heading"
+          },
+          {
+            "type": "textarea",
+            "id": "text-para",
+            "label": "Heading"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

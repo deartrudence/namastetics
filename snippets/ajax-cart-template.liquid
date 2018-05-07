@@ -1,0 +1,162 @@
+{% comment %}
+
+  This snippet provides the default handlebars.js templates for
+  the ajaxify cart plugin. Use the raw liquid tags to keep the
+  handlebar.js template tags as available hooks.
+
+{% endcomment %}
+  <script id="cartTemplate" type="text/template">
+  {% raw %}
+        <form action="/cart" method="post" class="cart-form" novalidate>
+     <div class="text-center cart_tiltle_header">
+        <h1 class="h3 dr-fs"> {% endraw %} YOUR CART{% raw %}</h1>
+      </div>
+      <div class="ajaxifyCart--products">
+        {{#items}}
+        <div class="ajaxifyCart--product line">
+          <div class="ajaxifyCart--row" data-line="{{line}}">
+            <div class="grid">
+              <div class="grid__item medium-up--one-whole">
+                <div class="grid">
+                  <div class=" grid__item three-tenths">
+                    <a href="{{url}}" class="ajaxCart--product-image"><img src="{{img}}" alt=""></a>
+                  </div>
+                  <div class="grid__item seven-tenths pad_right-left">
+                    <a href="{{url}}" class="cart_title">{{name}}</a>
+                    {{#if variation}}
+                    <p class="pro-variant">{{variation}}</p>
+                    {{/if}}
+                    <p class="prod-price"><span class="money">{% endraw %} {{ product.price | money }} {% raw %}</span></p>
+                    {{#list 11 itemQty}}{{/list}}
+                    <p class="pro_remove">
+                      <small><a href="/cart/change?line={{line}}&amp;quantity=0" class="ajaxifyCart--remove" data-line="{{line}}">Remove</a></small>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        {{/items}}
+      </div>
+	   <footer class="cart__footer_ajax">
+        <div class="grid">
+        <div class="grid__item text-center">
+	    <div class="ajaxifyCart--row cart__total">
+		  <span class="cart__subtotal-title">{% endraw %}{{ 'cart.general.subtotal' | t }} :{% raw %}</span>
+		  <span class="cart__subtotal"><span class="money">{{totalPrice}}</span></span>
+		  </div>
+		  <div class="ajaxifyCart--row">
+          <input type="submit" class="{{btnClass}} grid__item medium-up--one-whole chckout" name="checkout" value="CHECK OUT">
+		  <a href="/cart" class="cart__update cart__continue--large" >YOUR CART</a>
+		  </div>
+		  
+        </div>
+	  </div>
+	  </footer>
+    </form>
+  {% endraw %}
+  </script>
+  <script id="drawerTemplate" type="text/template">
+  {% raw %}
+    <div id="ajaxifyDrawer" class="ajaxify-drawer">
+      <div id="ajaxifyCart" class="ajaxifyCart--content {{wrapperClass}}"></div>
+    </div>
+    <div class="ajaxifyDrawer-caret"><span></span></div>
+  {% endraw %}
+  </script>
+  <script id="modalTemplate" type="text/template">
+  {% raw %}
+    <div id="ajaxifyModal" class="ajaxify-modal">
+      <div id="ajaxifyCart" class="ajaxifyCart--content"></div>
+    </div>
+  {% endraw %}
+  </script>
+  <script id="ajaxifyQty" type="text/template">
+  {% raw %}
+    <div class="ajaxifyCart--qty">
+      <input type="text" class="ajaxifyCart--num" value="{{itemQty}}" data-id="{{key}}" min="0" data-line="{{line}}" aria-label="quantity" pattern="[0-9]*">
+      <span class="ajaxifyCart--qty-adjuster ajaxifyCart--add" data-id="{{key}}" data-line="{{line}}" data-qty="{{itemAdd}}">+</span>
+      <span class="ajaxifyCart--qty-adjuster ajaxifyCart--minus" data-id="{{key}}" data-line="{{line}}" data-qty="{{itemMinus}}">-</span>
+    </div>
+  {% endraw %}
+  </script>
+  <script id="jsQty" type="text/template">
+  {% raw %}
+    <div class="js-qty">
+      <input type="text" class="js--num" value="{{itemQty}}" min="1" data-id="{{key}}" aria-label="quantity" pattern="[0-9]*" name="{{inputName}}" id="{{inputId}}">
+      <span class="js--qty-adjuster js--add" data-id="{{key}}" data-qty="{{itemAdd}}">+</span>
+      <span class="js--qty-adjuster js--minus" data-id="{{key}}" data-qty="{{itemMinus}}">-</span>
+    </div>
+  {% endraw %}
+  </script>
+<style>
+  .cart__footer_ajax .cart__total {
+    margin-bottom: 6px;
+    border-top: 1px solid #e9e9e9;
+    border-bottom: 1px solid #e9e9e9;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: inline-block;
+    width: 100%;
+    margin-top: 0;
+  }
+  .cart__subtotal{float:right;font-family: "open sans";}
+
+  .cart__subtotal-title {
+    float: left;
+    padding-left: 14px;
+    font-size: 12px;
+    line-height: 2em;
+  }
+  .cart__continue--large {
+    margin-right: 10px;
+    line-height: 1.2;
+    font-weight: 600;
+    width: 100%;
+    float: left;
+    padding: 13px;
+    background: #EAEAEA;
+    color: #fff;
+    border-radius: 3px;
+    font-size:13px;
+    letter-spacing: 1px;
+  }
+  .cart__continue--large:hover, .chckout:hover {opacity:1;}
+  .chckout {
+    width: 100%;
+    border-radius: 3px;
+    padding: 0px;
+    line-height: 1.2;
+    margin-bottom:15px;
+    text-transform:none;
+    background:#3E3E3E;
+    font-size: 13px;
+    font-weight: normal;
+  }
+  .checkout .btn:hover{opacity:1;}
+  .line {
+    border-bottom: 1px solid #e9e9e9;
+    padding-bottom: 9px;
+  }
+  .cart__footer_ajax {
+    margin-top: 20px;
+  }
+  .ajaxifyCart--product.line:last-child{border-bottom:0;}
+  .ajaxifyCart--product.line:last-child{border-bottom:0;}	
+  .ajaxifyCart--product .cart__qty-input{width: 80px;padding:0px 5px 0px 10px !important;text-align:left;margin-top:10px;}
+  .pro-variant{display:block; color: #4a4a4a; opacity: 0.6;font-size: 13px;}
+  .cart_title {font-weight: 600;font-size:15px;}
+  .cart-form .h3.dr-fs {font-size: 13px;}
+  .prod-price {color: #4a4a4a;opacity: 0.6;font-family: "open sans";font-size: 13px;}
+  .cart__footer_ajax .additional_checkout_buttons {
+    clear: both;
+    position: relative;
+    top: 14px;
+  }
+  .cart__footer_ajax .additional-checkout-button {
+    margin-left: 0;
+    width: 100%;
+  }
+</style> 

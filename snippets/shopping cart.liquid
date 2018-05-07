@@ -1,0 +1,58 @@
+{% if cart.item_count == 0 %}
+<p class="empty-cart">
+  {{ 'cart.general.empty' | t }}
+</p>
+{% else %}
+<div class="quick-cart-text ajaxcart__row ">
+  <p class="cart_total">Your Cart</p>
+<!--    <span class="item_count1"><span>{{ cart.item_count }}</span></span> items in your cart. -->
+</div>
+{% for item in cart.items %}
+<div class="quick-cart-item grid__item medium-up--one-whole ajaxcart__row" id="item-{{item.variant_id}}">
+  <div class="quick-cart-image grid__item medium-up--three-tenths">
+    <a href="{{ item.product.url }}" title="{{ item.product.title | escape }}">
+      {% assign found = false %}
+      {% for img in item.product.images %}
+      {% if found == false and item.variant.title contains img.alt %}
+      <img src="{{ img | product_img_url: '100x' }}"  alt="{{ item.alt | escape }}" />
+      {% assign found = true %}
+      {% endif %}
+      {% endfor %}
+      {% if found == false %}
+      <img src="{{ item.product.featured_image | product_img_url: '100x' }}"  alt="{{ item.product.featured_image.alt | escape }}" />
+      {% endif %}           
+    </a>
+  </div>
+  <div class="quick-cart-details grid__item  medium-up--seven-tenths">
+    <p><a href="{{ item.product.url }}">{{ item.title }}</a></p>
+    <p>
+      {{ item.price | money }} × {{item.quantity}}
+
+    </p>       
+    <a href="#" class="remove_item" data-id="{{ item.variant_id }}">{{ 'cart.general.remove' | t }}</a>
+  </div>
+</div>
+{% endfor %}
+<div class="ajaxcart__footer">
+  <div class="grid__item medium-up--one-whole">
+          <div class="grid__item two-thirds">
+            <p>{{ 'cart.general.subtotal' | t }}</p>
+          </div>
+          <div class="grid__item one-third text-right">
+            <p>{{cart.total_price | money}}</p>
+          </div>
+  </div>
+  <div class="mini_buton grid__item medium-up--one-whole">
+  <a class="btn--secondary" href="/cart" title="{{ 'general.mini_cart.view_cart' | t }}">{{ 'general.mini_cart.view_cart' | t }}</a>
+  <a class="btn--secondary" href="/checkout" title="{{ 'cart.general.checkout' | t }}">{{ 'cart.general.checkout' | t }}</a>
+  </div>
+</div>
+{% endif %}
+<style>
+  .cart_total {
+    border-bottom: 1px solid #a4a4a4;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+  .quick-cart-item{padding-top:40px;padding-bottom:20px;border-bottom:1px solid #a4a4a4;}
+</style>

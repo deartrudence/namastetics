@@ -1,0 +1,241 @@
+<ul class="accordion site-nav list--inline {{ nav_alignment }}" id="SiteNav">
+  <div class="site-bar-heading">Shop By Category</div>
+  {% for link in linklists ['sidebar-menu'].links %}
+    {% comment %}
+      Check if third-level nav exists on each parent link.
+    {% endcomment %}
+    {%- assign three_level_nav = false -%}
+    {%- assign child_list_handle = link.title | handleize -%}
+
+    {% if linklists[child_list_handle].links != blank %}
+      {% for childlink in linklists[child_list_handle].links %}
+        {% assign grand_child_list_handle = childlink.title | handleize %}
+        {% if linklists[grand_child_list_handle].links != blank %}
+          {%- assign three_level_nav = true -%}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+
+    {% if linklists[child_list_handle].links != blank %}
+      <li class="site-nav--has-dropdown sub-nav{% if three_level_nav %} site-nav--has-centered-dropdown{% endif %}{% if link.active %} site-nav--active{% endif %}" aria-has-popup="true" aria-controls="SiteNavLabel-{{ child_list_handle }}">
+        <a href="{{ link.url }}" class="toggle site-nav__link site-nav__link--main filter">
+         
+          {{ linklists[child_list_handle].title }}
+          {% comment %}
+          {% include 'icon-chevron-down' %}
+          {% endcomment %}
+          <span class="visually-hidden">{{ 'layout.navigation.expand' | t }}</span>
+        </a>
+
+        <div class="inner site-nav__dropdown-me{% if three_level_nav %} site-nav__dropdown--centered{% endif %}{% unless three_level_nav %} dropdow_width-me{% endunless %}" id="SiteNavLabel-{{ child_list_handle }}" aria-expanded="false">
+           
+          {% if three_level_nav %}
+            <div class="site-nav__childlist grid__item medium-up--five-tenths">
+             
+              <div class="site-nav__childlist-grid">
+                {% if linklists[child_list_handle].links != blank %}                
+                {% for childlink in linklists[child_list_handle].links %}
+                {% assign grand_child_list_handle = childlink.title | handle %}
+                {% if linklists[grand_child_list_handle].links != blank %}
+                <div class="site-nav__childlist-item">
+                  <a href="{{ childlink.url }}" data-collsnlink="{{childlink.title | handleize}}" class="hover-collection site-nav__link site-nav__child-link site-nav__child-link--parent">{{ linklists[grand_child_list_handle].title | escape }}</a>
+                  <ul>
+                    {% for grandchildlink in linklists[grand_child_list_handle].links %}
+
+                    <li class="hover-collection" data-collsnlink="{{grandchildlink.title | handleize}}">
+                      <a href="{{ grandchildlink.url }}" class="site-nav__link site-nav__child-link">{{ grandchildlink.title | escape }}</a>
+                    </li>
+
+                    {% endfor %}
+                  </ul>
+                </div>
+                {% else %}
+                <div class="site-nav__childlist-item_1">
+                <a href="{{ childlink.url }}" data-collsnlink="{{childlink.title | handleize}}" class="hover-collection site-nav__link site-nav__child-link site-nav__child-link--parent site-nav_block">{{ childlink.title | escape }}</a>
+                </div>
+                 {% cycle link.handle: '', '', '<div class="site-nav__childlist-item"></div>' %}
+                  {% endif %}
+                {% endfor %}
+                
+                {% endif %}
+                </div>
+                          
+            </div>
+          {% if linklists[child_list_handle].links != blank %}
+
+          {% for childlink in linklists[child_list_handle].links %}
+          {% assign grand_child_list_handle = childlink.title | handle %}
+          
+          {% if childlink.type == 'collection_link' %}
+          {% assign collection = childlink.object %}     
+
+          {%- assign max_height = 400 -%}
+          {%- assign grid_item_width = 'small--one-half medium-up--one-third' -%}
+          {% if collection.products_count > 0 %}
+          <div class="Product_collection grid__item medium-up--five-tenths" {% unless forloop.first %}style="display:none;"{% endunless %} data-collsnlink="{{childlink.title | handleize}}">
+            {% for product in collection.products limit: 3 %}
+            <div class="grid__item grid__item--{{section.id}} {{ grid_item_width }} padd_left_right text-center">
+              {% include 'product-card-grid', max_height: max_height %}
+            </div>            
+            {% endfor %}
+          </div>
+          {% endif %}
+          {% endif %}
+          
+          {% if linklists[grand_child_list_handle].links != blank %}
+          {% for grandchildlink in linklists[grand_child_list_handle].links %}
+          {% if grandchildlink.type == 'collection_link' %}
+          {% assign collection = grandchildlink.object %}     
+
+          {%- assign max_height = 400 -%}
+          {%- assign grid_item_width = 'small--one-half medium-up--one-third' -%}
+          {% if collection.products_count > 0 %}
+          <div class="Product_collection grid__item medium-up--five-tenths" data-collsnlink="{{grandchildlink.title | handleize}}" style="display:none;">
+            {% for product in collection.products limit: 3 %}
+            <div class="grid__item grid__item--{{section.id}} {{ grid_item_width }} padd_left_right text-center">
+              {% include 'product-card-grid', max_height: max_height %}
+            </div>            
+            {% endfor %}
+          </div>
+          {% endif %}
+          {% endif %}
+          	{% endfor %}
+          {% endif %}
+          
+          {% endfor %}
+
+          {% endif %}
+          {% else %}
+            <ul>
+              {% for childlink in linklists[child_list_handle].links %}
+                <li class="sub-nav-link" {% if childlink.active %}class="site-nav--active"{% endif %}>
+                  <a  href="{{ childlink.url }}" data-collsnlink="{{childlink.title | handleize}}" class="hover-collection site-nav__link site-nav__child-link{% if forloop.last %} site-nav__link--last{% endif %}">{{ childlink.title | escape }}</a>
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+      </li>
+    {% else %}
+      <li class="sub-nav {% if link.active %}site-nav--active{% endif %}">
+        <a href="{{ link.url }}" class="site-nav__link site-nav__link--main">{{ link.title }}</a>
+      </li>
+    {% endif %}
+  {% endfor %}
+ 
+</ul>
+
+<div class="color-swatches">
+  <div class="swatch color-option clearfix" data-option-index="0">
+  
+<div class="site-bar-heading">Shop By color</div>
+
+    
+    {% assign color = 'fuchsia,GreenYellow,teal,black,pink,green,darkgreen,magenta,darkmagenta,seagreen,navy,white,lightblue,lightgray,mediumvioletred,gray' | downcase %}
+    {% for tag in collection.all_tags %}
+    {% assign lower_tag = tag | downcase %}
+    {% assign filter_handle = lower_tag |  handleize %}
+    {% if color contains filter_handle %}
+            <div class="color-filter available" data-value="{{ tag }}" >
+ <a href="{{ shop.url }}/collections/{{collection.handle}}/{% if filter_handle != 'all' %}{{ filter_handle }}{% endif %}">
+<label class="color-filter-label" for="swatch-0-{{ tag }}" style="background-color: {{ tag }}"> </label> 
+ </a></div>
+  {% endif %}
+{% endfor %}
+    </div>
+  
+  
+           </div>
+<div class="filter-collection">
+  <div class="site-bar-heading">Shop by collection</div>
+          <div class="list-filter product-collection">
+            <ul class="subnav clearfix">
+               <div class="collection-menu">
+            {% for link in linklists.sidebar-collections.links %}
+            {% assign collections = link.object %}
+            <div class="collection-menu-item">
+            <a class="site-nav__link site-nav__link--main filter" href="{{ collections.handle }}">
+            <p>{{ collections.title }}</p>
+                  </a></div>
+            {% endfor %}
+            </div>
+            </ul>
+                   </div>
+</div>
+<style>
+.color-filter-label {
+	border-radius: 50px;
+	height: 25px;
+	width: 25px;
+	display: inline-block;
+	float: left;
+	margin-left: 5px;
+	border: 1px solid #cccccc;
+}
+ .inner {
+          display: none;
+      
+            }
+ 
+.inner.show .hover-collection.site-nav__link.site-nav__child-link {
+	display: block;
+	
+}
+/*  .toggle.site-nav__link.site-nav__link--main:after {
+    content: '\02795'; /* Unicode character for "plus" sign (+) */
+    font-size: 13px;
+    color: #777;
+    float: right;
+    margin-left: 5px;
+}
+
+.toggle.site-nav__link.site-nav__link--main:after {
+    content: "\2796"; /* Unicode character for "minus" sign (-) */
+} */
+  
+  
+  
+/*   // $('#second').collapsible('accordion', {
+//   animate: false
+// });
+// $('#third').collapsible('accordion');
+// $('#fourth').collapsible('default-open');
+// $('#fifth').collapsible({
+//   animate: false
+// });
+// $('#sixth').collapsible();
+
+
+
+//     $( ".accordion" ).accordion({
+//       collapsible: true,
+//      active: 'none'
+//     });
+//   $('.toggle').click(); */
+</style>
+  <script>
+
+    $(document).ready(function($) {
+        $('.toggle').click(function(e) {
+  	e.preventDefault();
+ 
+    var $this = $(this);
+  ;
+    if ($this.next().hasClass('show')) {
+        $this.next().removeClass('show');
+        $this.next().slideUp(350);
+    } else {
+        $this.parent().parent().find('li .inner').removeClass('show');
+        $this.parent().parent().find('li .inner').slideUp(350);
+        $this.next().toggleClass('show');
+        $this.next().slideDown(350);
+          }
+         $('toggle').collapsible('accordion');
+         
+
+ });
+          
+          
+
+   });
+  </script>

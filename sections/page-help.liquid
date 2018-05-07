@@ -1,0 +1,78 @@
+<div class="grid">
+    <div class="grid__item">
+      <div class="">
+      <div class="section-header medium-up--text-center set-pad">
+        <h1>{{ page.title }}</h1>
+      </div>
+        <div class="medium-up--text-center set-pad">
+          <ul class="tabs">
+            <li><a href="#tab-1">{{ section.settings.tab_1 }}</a></li>
+            <li><a href="#tab-2">{{ section.settings.tab_2 }}</a></li>
+            <li><a href="#tab-3">{{ section.settings.tab_3 }}</a></li>
+          </ul>
+          
+        </div>
+
+
+      <div class="rte">
+        
+        <div id="tab-1">
+             {% capture selectpage1%}{{ section.settings.page-1 }}{% endcapture %}
+			{{pages[selectpage1].content}}
+        </div>
+        <div id="tab-2">
+          {% capture selectpage%}{{ section.settings.page-2 }}{% endcapture %}
+			{{pages[selectpage].content}}
+        </div>
+        <div id="tab-3">
+             {% capture selectpage3%}{{ section.settings.page-3 }}{% endcapture %}
+			{{pages[selectpage3].content}}
+        </div>
+      </div>
+    </div>
+      </div>
+  </div>
+{% schema %}
+  {
+    "name": "Help Page",
+    "class": "index-section",
+    "settings": [
+	  {
+		"type": "text",
+        "id": "tab_1",
+        "label": "Tab 1"
+	  },
+	  {
+        "type":"page",
+        "id":  "page-1",
+        "label": "Page"
+      },
+	  {
+		"type": "text",
+        "id": "tab_2",
+        "label": "Tab 2"
+	  },
+	  {
+        "type":"page",
+        "id":  "page-2",
+        "label": "Page"
+      },
+	  {
+		"type": "text",
+        "id": "tab_3",
+        "label": "Tab 3"
+	  },
+	  {
+        "type":"page",
+        "id":  "page-3",
+        "label": "Page"
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

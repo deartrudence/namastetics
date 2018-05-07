@@ -1,0 +1,237 @@
+<div class="collection-hero marg_tp">
+        <div style="height: 180px; background-position: center center;" class="collection-hero__image lazyload js"
+             data-bgset="{% include 'bgset', image: section.settings.image %}"
+             data-sizes="auto"
+             data-parent-fit="cover"
+             style="background-size: contain; background-position: center center;background-image: url('{{ section.settings.image | img_url: '600x600' }});"></div>
+        <noscript>
+ <div class="collection-hero__image" style="height: 180px; background-position: center center; background-image: url({{ section.settings.image | img_url: '2048x600', crop: 'top' }});background-size: auto auto;"></div>
+      </noscript>
+  <div class="collection-hero__mobile-image lazyload js mobile-only"
+             data-bgset="{% include 'bgset', image: section.settings.mobile_image %}"
+             data-sizes="auto"
+             data-parent-fit="cover"
+             style="background-size: contain;margin:0px 12px;height: 180px; background-repeat: no-repeat; background-position: center center;background-image: url('{{ section.settings.mobile_image | img_url: '600x600' }});"></div>
+        <noscript>
+ <div class="collection-hero__mobile-image mobile-only" style="background-position: center center; height: 180px; background-image: url({{ section.settings.mobile_image | img_url: '2048x600', crop: 'top' }});background-size: auto auto;"></div>
+      </noscript>
+  
+  
+        <div class="collection-hero__title">
+          <div class="main_box shipping-main-box">
+            <div class="box_ttl">
+              <h2>{{ section.settings.title }}</h2>
+            </div>
+            <div class="box_txt">
+              <span>{{ section.settings.text }}</span>
+            </div>
+          </div>
+        </div>
+</div>
+<style>
+  .collection-hero.marg_tp {
+    margin-top: 63px;
+    margin-bottom: 0;
+  }
+  .main_box {
+    display: inline-block;
+    background: {{ section.settings.box_back_clr }};
+    padding: 10px 3%;
+    border: 1px solid {{ section.settings.box_clr }};
+    box-shadow: none;
+    opacity: 1;
+  }
+  .box_ttl h2
+  {
+    font-size: 28px;
+    color: {{ section.settings.ttl_clr }};
+    font-weight: 300;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    text-transform: capitalize;
+  }
+  .box_txt 
+  {
+    color:  {{ section.settings.txt_clr }};
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 10px;
+    opacity: 0.8;
+    text-transform: capitalize;
+  }
+  .collection-hero__image.ratio-container::after {
+  content: "";
+  display: block;
+  height: 0;
+  padding-bottom: 36%;
+  width: 100%;
+    }
+   @media only screen and (max-width: 400px) {
+  .collection-hero__mobile-image {
+	background: contain !important;
+	background-repeat: no-repeat;
+	height: 200px !important;
+}
+     .box_txt {
+	font-size: 14px;
+	}
+     .box_ttl h2
+    {
+      font-size: 19px;
+    }
+  
+   .main_box {
+	background: rgba(255,255,255,0.65);
+	padding: 30px 15px;
+	border: none;
+	}  
+    
+  }
+  @media only screen and (min-width: 1200px) {
+    .collection-hero__image{  
+  background-size: cover !important;
+    margin:0px !important;
+}
+  }
+  @media only screen and (min-width: 401px) and (max-width: 519px) 
+  {
+     .collection-hero__mobile-image {
+	background: contain !important;
+	background-repeat: no-repeat !important;
+	
+}
+    .main_box 
+    {
+      padding: 30px 20px;
+      font-size: 16px;
+    }
+    .box_txt
+    {
+      font-size: 13px;
+    }
+    .box_ttl h2
+    {
+      font-size: 25px;
+    }
+    .box_txt {
+      font-size: 16px;
+    }
+  }
+  @media only screen and (min-width: 520px) and (max-width: 767px)
+  {
+    .main_box 
+    {
+      padding: 20px 5%;
+      font-size: 19px;
+    }
+    .box_txt
+    {
+      font-size: 16px;
+    }
+  }
+  @media only screen and (min-width: 1400px){
+    .main_box 
+  {
+    padding: 32px 6%;
+  }
+  }
+  @media only screen and (min-width: 768px){
+    .collection-hero__mobile-image{
+      display: none;
+    } 
+    .collection-hero__image{
+      display: block !important;
+    } 
+   
+     }
+  @media only screen and (max-width: 767px){
+   .collection-hero__image{
+      display: none !important;
+    } 
+    .collection-hero__mobile-image {
+	display: block !important;
+/* 	height: 400px !important; */
+}
+    .collection-hero__title {
+	padding: 0px 20px;
+}
+  }
+   @media only screen and (min-width: 768px) and (max-width: 1000px){
+      .main_box 
+  {
+    padding: 5px 3%;
+  }
+   }
+  
+</style>
+
+{% schema %}
+        {
+        "name": "Image with Textoverlay",
+        "settings": [
+          {
+            "type":"image_picker",
+            "id": "image",
+            "label":"Image"
+          },
+           {
+            "type":"image_picker",
+            "id": "mobile_image",
+            "label":"Image For Mobile"
+          },
+          {
+            "type":"header",
+            "content":"Box Settings"
+          },
+          {
+            "type":"color",
+            "id":"box_clr",
+            "label":"Border Color",
+            "default":"#000"
+          },
+
+          {
+            "type":"color",
+            "id":"box_back_clr",
+            "label":"Box Background Color",
+            "default":"#000"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label":"Heading",
+            "default":"Image Title"
+          },
+          {
+            "type":"color",
+            "id":"ttl_clr",
+            "label":"Heading Color",
+            "default":"#000"
+          },
+          {
+            "type": "text",
+            "id": "text",
+            "label": "Text",
+            "default": "Image Text"
+          },
+          {
+            "type":"color",
+            "id":"txt_clr",
+            "label":"Text Color",
+            "default":"#000"
+          }
+        ],
+        "presets": [
+          {
+            "name": "Collection Image",
+            "category": "Collection"
+          }
+        ]
+        }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

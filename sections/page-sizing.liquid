@@ -1,0 +1,118 @@
+<div class="top-banner">
+{% if  section.settings.image-banner  %}  
+<img src="{{ section.settings.image-banner | img_url }}">
+  {% else %}
+  <div class="set-pad medium-up--hide pad-top-20">
+    <h1 class="page-title">{{ page.title }}</h1>
+    <h5>{{ section.settings.banner_txt }}</h5>
+  </div>
+  <div class="bck-clr"></div>
+  {% endif %}
+  <div class="row page__title grid__item medium-up--five-sixths medium-up--push-one-twelfth small--hide">
+    <h1 class="page-title">{{ page.title }}</h1>
+    <h5>{{ section.settings.banner_txt }}</h5>
+  </div>
+</div>
+<div class="grid">
+ 
+    <div class="grid__item medium-up--five-sixths medium-up--push-one-twelfth">
+      <h4 class="medium-up--text-center set-pad">{{ section.settings.title }}</h4>
+      <div class="medium-up--text-center set-pad">
+        <ul class="tabs">
+          <li><a href="#tab-1">{{ section.settings.tab_1 }}</a></li>
+          <li><a href="#tab-2">{{ section.settings.tab_2 }}</a></li>
+          <li><a href="#tab-3">{{ section.settings.tab_3 }}</a></li>
+        </ul>
+      </div>
+
+      <div class="rte">
+        <div id="tab-1">
+          {% capture selectpage1%}{{ section.settings.page-1 }}{% endcapture %}
+			{{pages[selectpage1].content}}
+        </div>
+        <div id="tab-2">
+          {% capture selectpage2%}{{ section.settings.page-2 }}{% endcapture %}
+			{{pages[selectpage2].content}}
+        </div>
+        <div id="tab-3">
+        	{% capture selectpage3%}{{ section.settings.page-3 }}{% endcapture %}
+			{{pages[selectpage3].content}}
+        </div>
+      </div>
+    </div>
+ 
+  
+</div>
+{% schema %}
+  {
+    "name": "Sizing Page",
+    "class": "index-section",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "image-banner",
+        "label": "Image"
+      },
+      {
+        "type": "text",
+        "id": "banner_txt",
+        "label": "Banner Text"
+      },
+      {
+        "type": "header",
+        "content": "Title"
+      },
+	  {
+		"type": "text",
+        "id": "title",
+        "label": "Title"
+	  },
+      {
+        "type": "header",
+        "content": "Tabs Title"
+      },
+	  {
+		"type": "text",
+        "id": "tab_1",
+        "label": "Tab 1"
+	  },
+	  {
+        "type":"page",
+        "id":  "page-1",
+        "label": "Page"
+      },
+	  {
+		"type": "text",
+        "id": "tab_2",
+        "label": "Tab 2"
+	  },
+	  {
+        "type":"page",
+        "id":  "page-2",
+        "label": "Page"
+      },
+	  {
+		"type": "text",
+        "id": "tab_3",
+        "label": "Tab 3"
+	  },
+	  {
+        "type":"page",
+        "id":  "page-3",
+        "label": "Page"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Image with text overlay",
+        "category": "Image"
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

@@ -1,0 +1,160 @@
+{% section 'page-sizing' %}
+
+<style>
+  .set-page-pad{padding:0 25px;}
+  ul.tabs {
+    display: block;
+    margin: 0 0 20px;
+    padding: 0;
+  }
+  ul.tabs li {
+    border-right:1px solid;
+    display: inline-block;
+    height: 30px;
+    margin-bottom: 0;
+    padding: 0;
+    width: auto;
+  }
+  ul.tabs li:last-child{border-right:none;}
+  ul.tabs li a {
+    -moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: #DDDDDD !important;
+    display: block;
+    font-size: 24px;
+    height: 29px;
+    line-height: 30px;
+    margin: 0;
+    padding: 0 40px;
+    text-decoration: none;
+    width: auto;
+    color: #303030;
+    border-bottom:none !important;
+  }
+  ul.tabs li a.active {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-left-width: 1px;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    color: purple;
+    height: 30px;
+    margin: 0 0 0 -1px;
+  }
+  ul.tabs li:first-child a.active {
+    margin-left: 0;
+  }
+  ul.tabs li:first-child a {
+    border-top-left-radius: 2px;
+  }
+  ul.tabs li:last-child a {
+    border-top-right-radius: 2px;
+  }
+  ul.tabs:before, ul.tabs:after {
+    content: " ";
+    display: block;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    width: 0;
+  }
+  ul.tabs:after {
+    clear: both;
+  }
+  @import "compass/css3";
+
+  *, *:before, *:after {box-sizing:  border-box !important;}
+
+
+  article {
+    -moz-column-width: 30em;
+    -webkit-column-width: 30em;
+    -moz-column-gap: 1em;
+    -webkit-column-gap: 1em; 
+
+  }
+
+  section {
+    display: inline-block;
+    margin:  0.25rem;
+    padding:  1rem;
+    width:  100%; 
+    background:  #efefef;
+  }
+  #tab-2{display: block; margin-top: 20px; float: left;}
+  .order{padding: 17px; box-shadow: 0px 0px 2px 2px #a4a4a4; border-radius: 4px;}
+  .order h4{font-weight:bold;font-size: 15px;color: #4A4A4A;margin-bottom:10px;}
+  .order p{font-size:15px;color: #4A4A4A;}
+  .tracking{padding: 17px; box-shadow: 0px 0px 2px 2px #a4a4a4; border-radius: 4px; margin-top: 20px;float:left;width:100%;}
+  .pad-zero{padding:0;}
+  .tracking h4{font-weight:bold;font-size: 15px;color: #4A4A4A;margin-bottom:10px;}
+  .cancle{padding: 17px; box-shadow: 0px 0px 2px 2px #a4a4a4; border-radius: 4px;}
+  .cancle h4{font-weight:bold;font-size: 15px;color: #4A4A4A;margin-bottom:10px;}
+  .taxes{padding: 17px; margin-top: 20px; box-shadow: 0px 0px 2px 2px #a4a4a4; border-radius: 4px; float: right;}
+  .taxes h4{font-weight:bold;font-size: 15px;color: #4A4A4A;margin-bottom:10px;}
+tbody td{padding: 20px;text-align:center;text-transform:uppercase;letter-spacing:1px;}
+  th, td{border:none;}
+tr:first-child td{font-weight:bold;}
+
+tbody tr:nth-child(even){
+  background-color: #F9F9F9;
+}
+  .table-size td {
+  font-family: "open sans";
+}
+  .top-banner {
+    position: relative;
+    margin-bottom:55px;
+}
+  .top-banner > img {
+    max-height: 300px;
+    object-fit: cover;
+    object-position: center -183px;
+    width: 100%;
+    opacity: 0.4;
+}
+  .bck-clr {
+    background: #F8F8F8;
+    height: 350px;
+    position: relative;
+}
+  .top-banner .row.page__title {
+    position:absolute;
+    bottom: 10%;
+}
+  .top-banner .page-title {
+    padding-bottom: 0;
+    font-weight: bold;
+    font-size: 24px;
+}
+.pad-top-20{padding-top:20px;}
+.guide h2 {margin-top: 0;margin-bottom: 11px;}
+@media only screen and (min-width: 1024px) and (max-width:1199px){  
+   tbody td{font-size: 13px;padding: 8px;letter-spacing:0;}
+}
+@media only screen and (min-width: 768px) and (max-width:1023px){  
+   tbody td{font-size: 11px;padding: 8px;letter-spacing:0;}
+}
+  @media only screen and (min-width:640px) and (max-width:767px){
+      ul.tabs li:first-child a{padding:0 40px 0px 0;}
+  }
+  @media only screen and (min-width: 480px) and (max-width:639px){
+   tbody td{font-size: 13px;padding: 10px;}
+    ul.tabs li:first-child a{padding:0 23px 0px 0;}
+    ul.tabs li a{font-size:22px;line-height:20px;padding:0 25px 0px 25px;height:20px;}
+   	ul.tabs li a.active{line-height:20px;}
+    ul.tabs li{height:25px;}
+  }
+ @media only screen and (max-width: 479px){
+    ul.tabs li:first-child a{padding:0 23px 0px 0;}
+    ul.tabs li a{font-size:18px;line-height:20px;padding:0 23px 0px 23px;height:20px;}
+   	ul.tabs li a.active{line-height:20px;}
+    ul.tabs li{height:20px;}
+   tbody td{font-size: 11px;padding: 6px;letter-spacing: 0;}
+}
+  .grid__item.set-pad.mar-top-bottom.set-pad-left > h4 {
+  font-weight: 600;
+}
+</style>

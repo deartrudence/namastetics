@@ -1,0 +1,13 @@
+development:
+  password: d53b68c8fd9edfbc85aa587f4b618bf4
+  theme_id: "live"
+  store: ua5-namastetics.myshopify.com
+  ignore_files:
+    - settings_data.json 
+  # Uncomment this line to avoid resetting theme settings
+
+production:
+  password:
+  theme_id: "live"
+  store: your-shop.myshopify.com
+  ignore_files:

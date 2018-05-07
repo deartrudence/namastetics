@@ -1,0 +1,73 @@
+{% comment %}
+  Set the extension of your color files below. Use 'png', 'jpeg', 'jpg' or 'gif'.
+{% endcomment %}
+
+{% assign file_extension = 'png' %}
+{% assign current_variant = product.selected_or_first_available_variant %}
+
+{% if swatch == blank %}
+<div class="swatch error">
+  <p><ly-as-5177899>You must include the snippet swatch.liquid with the name of a product option.</ly-as-5177899></p>
+  <p><ly-as-5177900>Use:</ly-as-5177900> <code><ly-as-5742963>{% raw %}{% include 'swatch' with 'name of your product option here' %}{% endraw %}</ly-as-5742963></code></p>
+  <p><ly-as-5177902>Example:</ly-as-5177902> <code><ly-as-5742964>{% raw %}{% include 'swatch' with 'Color' %}{% endraw %}</ly-as-5742964></code></p>
+</div>
+{% else %}
+
+{% assign found_option = false %}
+{% assign is_color = false %}
+{% assign option_index = 0 %}
+
+{% for option in product.options %}
+  {% if option == swatch %}
+    {% assign found_option = true %}
+    {% assign option_index = forloop.index0 %}
+    <style>
+      label[for="product-select-option-{{ option_index }}"] { display: none; }
+      #product-select-option-{{ option_index }} { display: none; }
+      #product-select-option-{{ option_index }} + .custom-style-select-box { display: none !important; }
+    </style>
+    {% assign downcased_option = swatch | downcase %}
+    {% if downcased_option contains 'color' or downcased_option contains 'colour' %}
+      {% assign is_color = true %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+
+{% unless found_option %}
+<div class="swatch error">
+  <p><ly-as-5177904>You included the snippet swatch.liquid with the name of a product option —</ly-as-5177904> <code>'{{ swatch }}'</code> <ly-as-5177905>— that does not belong to your product.</ly-as-5177905></p>
+  <p><ly-as-5177906>Use</ly-as-5177906> <code><ly-as-5742963>{% raw %}{% include 'swatch' with 'name of your product option here' %}{% endraw %}</ly-as-5742963></code></p>
+  <p><ly-as-5177902>Example:</ly-as-5177902> <code><ly-as-5742964>{% raw %}{% include 'swatch' with 'Color' %}{% endraw %}</ly-as-5742964></code></p>
+  <p><strong><ly-as-5177907>This is case-sensitive!</ly-as-5177907></strong> <ly-as-5177908>Do not put in</ly-as-5177908> <code><ly-as-5177909>'color'</ly-as-5177909></code> <ly-as-5177910>if your product option name is</ly-as-5177910> <code><ly-as-5177911>'Color'</ly-as-5177911></code>.</p>
+</div>
+{% else %}
+<div class="swatch clearfix" data-option-index="{{ option_index }}">
+  <div class="header">{{ swatch }}</div>
+  {% assign values = '' %}
+  {% for variant in product.variants %}
+    {% assign value = variant.options[option_index] %}
+    {% unless values contains value %}
+      {% assign values = values | join: ',' %}
+      {% assign values = values | append: ',' | append: value %}
+      {% assign values = values | split: ',' %}
+      <div data-value="{{ value | escape }}" class="swatch-element {% if is_color %}color {% endif %}{{ value | handle }} {% if variant.available %}available{% else %}soldout{% endif %}">
+        {% if is_color %}
+        <div class="tooltip">{{ value }}</div>
+        {% endif %}
+        <input id="swatch-{{ option_index }}-{{ value | handle }}" type="radio" name="option-{{ option_index }}" value="{{ value | escape }}"{% if variant == current_variant %} checked{% endif %} {% unless variant.available %}disabled{% endunless %} />
+        {% if is_color %}
+        <label for="swatch-{{ option_index }}-{{ value | handle }}" style="background-color: {{ value | split: ' ' | last | handle }}; background-image: url({% comment %}ly_asset_replace_for_[ value | handle | append: '.' | append: file_extension | asset_url ]_begin{% endcomment %}{% assign ly_asset = value | handle | append: '.' | append: file_extension %}{% include 'ly-asset' with ly_asset %}{{ ly_translation  }}{% comment %}ly_asset_replace_end{% endcomment %})">
+        </label>
+        {% else %}
+        <label for="swatch-{{ option_index }}-{{ value | handle }}">
+          {{ value }}
+        </label>
+        {% endif %}
+      </div>
+    {% endunless %}
+  {% endfor %}
+</div>
+
+{% endunless %}
+
+{% endif %}

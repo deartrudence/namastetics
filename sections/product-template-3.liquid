@@ -1,0 +1,686 @@
+
+<style>
+/*   .product-single__thumbnails {height:870px;} */
+  .product-single {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+}
+  .product-single__meta.sticky-wrapper.sticky {
+    position: -webkit-sticky;
+    position: -moz-sticky;
+    position: -ms-sticky;
+    position: -o-sticky;
+    position: sticky;
+    top: 40px;
+}
+  .collection-hero.marg_tp {
+	margin-top: 0px !important;
+}
+  .page-container {overflow:visible;}
+  .product_proimage .product-single__thumbnail--{{ section.id }} { background-size: cover;}
+.ratio-container {
+    position: relative;
+}
+.ratio-container:after {
+    content:'';
+    display: block;
+    height: 0;
+    width: 100%;
+    /* 16:9 = 56.25% = calc(9 / 16 * 100%) */
+    padding-bottom: 40%;
+    content:"";
+    margin-bottom: 30px;
+}
+.ratio-container > * {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+} 
+  .box {
+  background: #fff none no-repeat scroll 0 0 / contain ;
+}
+/*  #cssmenu {
+  margin: 10% 13% 0;
+  padding-right: 21px;
+} */
+
+  .product_form_sticky .product-form__item {
+     vertical-align: baseline!important;
+  }
+  .visually-hidden {
+  border: 0 none;
+  clip: rect(0px, 0px, 0px, 0px);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute !important;
+  width: 1px;
+}
+@media screen and (max-width:767px) {
+    #cssmenu {
+    padding:0 20px;
+    }
+  }
+  #cssmenu,
+#cssmenu ul,
+#cssmenu li,
+#cssmenu a {
+  list-style: none;
+  text-decoration: none;
+  line-height: 1;
+  text-align:left;
+}
+#cssmenu a {
+  line-height: 1.3;
+}
+#cssmenu > ul > li:first-child {
+   -webkit-border-radius: 3px 3px 0 0;
+  -moz-border-radius: 3px 3px 0 0;
+  border-radius: 3px 3px 0 0;
+}
+
+#cssmenu > ul > li > a {
+  display: block;
+  border-top: none;
+  opacity: 0.6;
+ 
+}
+  #cssmenu > ul > li:last-child a {
+    border-bottom: 0 none;
+  }
+#cssmenu > ul > li > a > span {
+  display: block;
+  padding: 12px 0;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+#cssmenu > ul > li > a:hover {
+  text-decoration: none;
+}
+#cssmenu > ul > li.active {
+  border-bottom: none;
+}
+  #cssmenu > ul > li.has-sub > a span {
+    background:rgba(0, 0, 0, 0) url("{{'down-arrow.png' | asset_url}}") no-repeat scroll right center / 20px auto;
+      color:#383435;
+      }
+#cssmenu > ul > li.has-sub.active > a span {
+  background:rgba(0, 0, 0, 0) url("{{'up-arrows.png' | asset_url}}") no-repeat scroll right center / 20px auto;
+}
+
+#cssmenu ul ul {
+  display: none;
+  background: #fff;
+  border-bottom: 1px solid #a2a194;
+  margin: 0;
+  padding: 20px 0;
+}
+#cssmenu ul ul li {
+  padding:5px 0;
+}
+#cssmenu ul ul li:last-child {
+  border-bottom: none;
+}
+
+@media only screen and (max-width:599px){
+#cssmenu > ul > li.has-sub > a span {font-size: 1rem;}
+}
+  .product_form_sticky #cssmenu {display:none;}
+  .product_form_sticky .shor_discription {display:none;}
+  .product_form_sticky .size_guid {display:none;}
+
+</style>
+<div class="product-template__container" itemscope itemtype="http://schema.org/Product" id="ProductSection-{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="product" data-enable-history-state="true">
+  <meta itemprop="name" content="{{ product.title }}">
+  <meta itemprop="url" content="{{ shop.url }}{{ product.url }}">
+  <meta itemprop="image" content="{{ product.featured_image.src | img_url: '800x' }}">
+{% include 'breadcrumb' %}
+  {% comment %}
+    Get first variant, or deep linked one
+  {% endcomment %}
+  {%- assign current_variant = product.selected_or_first_available_variant -%}
+  {%- assign product_image_zoom_size = '1024x1024' -%}
+  {%- assign product_image_scale = '2' -%}
+  {%- assign enable_zoom = section.settings.enable_zoom -%}
+
+  {% case section.settings.image_size %}
+    {% when 'small' %}
+      {%- assign product_image_width = 'medium-up--one-third' -%}
+      {%- assign product_description_width = 'medium-up--two-thirds' -%}
+      {%- assign product_thumbnail_width = 'medium-up--one-third' -%}
+      {%- assign height = 345 -%}
+    {% when 'medium' %}
+      {%- assign product_image_width = 'medium-up--one-half' -%}
+      {%- assign product_description_width = 'medium-up--one-half' -%}
+      {%- assign product_thumbnail_width = 'medium-up--one-quarter' -%}
+      {%- assign height = 530 -%}
+    {% when 'large' %}
+      {%- assign product_image_width = 'medium-up--seven-twelfths' -%}
+      {%- assign product_description_width = 'medium-up--five-twelfths' -%}
+      {%- assign product_thumbnail_width = 'medium-up--one-whole' -%}
+      {%- assign height = 920 -%}
+    {% when 'full' %}
+      {%- assign product_image_width = '' -%}
+      {%- assign product_description_width = '' -%}
+      {%- assign product_thumbnail_width = 'medium-up--one-eighth' -%}
+      {%- assign height = 1090 -%}
+      {%- assign enable_zoom = false -%}
+  {% endcase %}
+
+  <div class="grid product-single">
+    <div class="grid__item product-single__photos {{ product_image_width }}{% if section.settings.image_size == 'full' %} product-single__photos--full{% endif %}">
+      <div class="over_flow_hidden">
+      {%- assign featured_image = product.selected_or_first_available_variant.featured_image | default: product.featured_image -%}
+      {% comment %}
+      {% for image in product.images %}
+        {% capture img_id %}FeaturedImage-{{ section.id }}-{{ image.id }}{% endcapture %}
+        {% capture img_class %}product-featured-img{% endcapture %}
+        {% capture zoom_img_id %}FeaturedImageZoom-{{ section.id }}-{{ image.id }}{% endcapture %}
+        {% capture img_wrapper_id %}{{ zoom_img_id }}-wrapper{% endcapture %}
+        {%- assign img_url = image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+
+        {% include 'image-style' with small_style: true, width: height, height: height, wrapper_id: img_wrapper_id, img_id: img_id %}
+
+        <div id="{{ img_wrapper_id }}" class="product-single__photo-wrapper js">
+          <div id="{{ zoom_img_id }}" style="padding-top:{{ 1 | divided_by: image.aspect_ratio | times: 100}}%;" class="product-single__photo{% if enable_zoom %} js-zoom-enabled{% endif %}{% if product.images.size > 1 %} product-single__photo--has-thumbnails{% endif %}{% unless featured_image == image %} hide{% endunless %}" data-image-id="{{ image.id }}"{% if enable_zoom %} data-zoom="{{ image | img_url: product_image_zoom_size, scale: product_image_scale }}"{% endif %}>
+            <img id="{{ img_id }}"
+                 class="feature-row__image {{ img_class }} lazyload{% unless featured_image == image %} lazypreload{% endunless %}"
+                 src="{{ image | img_url: 'master' }}"
+                 data-src="{{ img_url }}"
+                 data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
+                 data-aspectratio="{{ image.aspect_ratio }}"
+                 data-sizes="auto"
+                 alt="{{ image.alt | escape }}">
+          </div>
+        </div>
+      {% endfor %}
+
+      <noscript>
+        {% capture product_image_size %}{{ height }}x{% endcapture %}
+        <img src="{{ featured_image | img_url: product_image_size, scale: product_image_scale }}" alt="{{ featured_image.alt }}" id="FeaturedImage-{{ section.id }}" class="product-featured-img" style="max-width: {{ height }}px;">
+      </noscript>
+     
+     
+      <div class="grid__item thumb-images-prod small--hide">
+      {% assign i = 1 %}
+      {% for image in product.images %}
+      {% unless image.src contains "big-banner_" or image.src contains featured_image.src%}
+
+      {% if i <= 1 %}
+      
+      
+      <div class="grid__item medium-up--one-whole pad_left_images">
+        <img class="product-single__thumbnail-image" src="{{ image.src | img_url: 'master', scale: 2 }}" alt="{{ image.alt | escape }}">
+      </div>
+      
+      {% endif %}
+      {% assign i = i | plus:1 %}
+      {% endunless %}
+      {% endfor %}
+        </div>
+        <div class="grid__item main-images-prod small--hide ">
+          <div class="grid__item medium-up--one-whole pad_left_images">
+            {% for image in product.images %}
+            {% if image.src contains featured_image.src %}
+
+            <img class="product-single__thumbnail-image" src="{{ image.src | img_url: 'master', scale: 2 }}" alt="{{ image.alt | escape }}">
+
+            {% endif %}
+            {% endfor %}
+
+
+          </div>
+        </div>
+        <div class="grid__item thumb-images-prod small--hide ">
+      {% assign i = 1 %}
+      {% for image in product.images %}
+      {% unless image.src contains "big-banner_" or image.src contains featured_image.src %}
+      {% if i > 1 %}
+          
+      <div class="grid__item medium-up--one-half pad_left_images">
+      <img class="product-single__thumbnail-image" src="{{ image.src | img_url: 'master', scale: 2 }}" alt="{{ image.alt | escape }}">
+      </div>
+      {% endif %}
+      {% assign i = i | plus:1 %}
+      {% endunless %}    
+      {% endfor %}
+        </div>
+         {% endcomment %}
+        
+        <div class="grid thumb-images-prod">
+          <div class="grid__item medium-up--one-fifth">
+            <div class="sticky_wrap main_image_prodct">
+            {% for image in product.images %}
+            {% unless image.src contains "big-banner_"  %}
+            <div class="pad_left_images">
+              <a {% if forloop.first %}class="active"{% endif %} href="#image{{forloop.index}}">
+              <img class="product-single__thumbnail-image" src="{{ image.src | img_url: 'thumb', scale: 2 }}" alt="{{ image.alt | escape }}">
+              </a>
+             </div>
+            {% endunless %}
+            {% endfor %}
+            </div>
+          </div>
+          
+          <div class="grid__item medium-up--four-fifths main_baner_pro">
+            {% for image in product.images %}
+            {% unless image.src contains "big-banner_"  %}
+            <div class="pad_left_images" id="image{{forloop.index}}">
+             <img class="product-single__thumbnail-image" src="{{ image.src | img_url: 'master', scale: 2 }}" alt="{{ image.alt | escape }}">
+            </div>
+            {% endunless %}
+            {% endfor %}
+          </div>
+        </div>
+        
+        <div class="grid__item mobile_image_section pad_left-right_images">
+          <ul class="product-photo-slider">
+            {% for image in product.images %}
+            {% unless image.src contains "big-banner_" %}
+            <li class="product-photo-image">
+              <img class="product-single__thumbnail-image" src="{{ image.src | img_url: 'large', scale: 2 }}" alt="{{ image.alt | escape }}">
+            </li>
+            {% endunless %}
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="grid__item mobile_image_section pad_left-right_images">
+          <ul class="mobile--images multiple--image">
+            {% for image in product.images %}
+            {% unless image.src contains "big-banner_" %}
+            <li class="product-photo-image">
+              <img class="product-single__thumbnail-image" src="{{ image.src | img_url: 'large', scale: 2 }}" alt="{{ image.alt | escape }}">
+            </li>
+            {% endunless %} 
+            {% endfor %}
+          </ul>
+        </div>
+     {% comment %}
+      {% unless image.src contains "big-banner_" or image.src contains featured_image.src %}
+      <div class="box ratio-container"
+           data-bgset="{% include 'bgset', image: image.src %}"
+           data-sizes="auto"
+           data-parent-fit="cover"
+           style="background-position: center top;background-image: url('{{ image.src | img_url: 'master', scale: 2 }});">
+        <img class="product-single__thumbnail-image medium-up--hide small--hide" src="{{ image.src | img_url: 'master', scale: 2 }}" alt="{{ image.alt | escape }}">
+      </div>    
+      {% endunless %}
+      {% endcomment %}
+     
+      </div>
+
+    </div>
+
+    <div class="grid__item {{ product_description_width }} product_info-2 text-center">
+      {% assign productdescription = product.description | split:'***' %}
+      <div class="product-single__meta sticky-wrapper sticky">
+<div class="all__info tbl">
+        <h1 itemprop="name" class="product-single__title tbl-cell">{{ product.title }}</h1>
+
+        {% if section.settings.show_vendor %}
+          <p itemprop="brand" class="product-single__vendor">{{ product.vendor }}</p>
+        {% endif %}
+
+        <div class="pro__info_all tbl-cell" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+          <meta itemprop="priceCurrency" content="{{ shop.currency }}">
+
+          <link itemprop="availability" href="http://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}">
+
+         <p class="product-single__price product-single__price-{{ section.id }}{% unless current_variant.available %} product-price--sold-out{% endunless %}">
+                    {% if current_variant.compare_at_price > current_variant.price %}
+                    <span class="visually-hidden">{{ 'products.product.regular_price' | t }}</span>
+                    <s id="ComparePrice-{{ section.id }}" class="ComparePrice-{{ section.id }}">{{ current_variant.compare_at_price | money }}</s>
+                    <span class="product-price__price product-price__price-{{ section.id }} product-price__sale product-price__sale--single">
+                      <span id="ProductPrice-{{ section.id }}" class="ProductPrice-{{ section.id }}"
+                            itemprop="price" content="{{ current_variant.price | divided_by: 100.00 }}">
+                        {{ current_variant.price | money }}
+                      </span>
+                      {% comment %}
+                      <span class="product-price__sale-label product-price__sale-label-{{ section.id }}">{{ 'products.product.on_sale' | t }}</span>
+                      {% endcomment %}         
+           			</span>
+                    {% else %}
+                    <span class="visually-hidden">{{ 'products.product.regular_price' | t }}</span>
+                    <s id="ComparePrice-{{ section.id }}" class="hide ComparePrice-{{ section.id }}">{{ current_variant.compare_at_price | money }}</s>
+                    <span class="product-price__price product-price__price-{{ section.id }}">
+                      <span id="ProductPrice-{{ section.id }}" class="ProductPrice-{{ section.id }}"
+                            itemprop="price" content="{{ current_variant.price | divided_by: 100.00 }}">
+                        {{ current_variant.price | money }}
+                      </span>
+                      {% comment %}
+                      <span class="product-price__sale-label product-price__sale-label-{{ section.id }} hide">{{ 'products.product.on_sale' | t }}</span>
+                      {% endcomment %}          
+           				</span>
+                    {% endif %}
+                  </p>
+          <div class="shor_discription">
+            <div class="product__description-short">
+              <p> {{productdescription[0] | strip_html | truncate: 160}}</p>
+              <a href="#">Read More</a>
+            </div>
+            <div class="product__description-full visually-hidden">
+              {{productdescription[0] }}
+              <a href="#">Read Less</a>
+            </div>
+            </div>
+          <form action="/cart/add" method="post" enctype="multipart/form-data" class="product-form product-form-{{ section.id }}{% unless section.settings.show_variant_labels %} product-form--hide-variant-labels{% endunless %}" data-section="{{ section.id }}">
+            {% unless product.options.size == 1 and product.variants[0].title == 'Default Title' %}
+              {% for option in product.options_with_values %}
+                <div class="selector-wrapper js product-form__item">
+                  <label {% if option.name == 'default' %}class="label--hidden" {% endif %}for="SingleOptionSelector-{{ forloop.index0 }}">
+                    {{ option.name }}
+                  </label>
+                  <select class="single-option-selector single-option-selector-{{ section.id }} product-form__input" id="SingleOptionSelector-{{ forloop.index0 }}" data-index="option{{ forloop.index }}">
+                    {% for value in option.values %}
+                      <option value="{{ value | escape }}"{% if option.selected_value == value %} selected="selected"{% endif %}>{{ value }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              {% endfor %}
+            {% endunless %}
+
+            <select name="id" id="ProductSelect-{{ section.id }}" data-section="{{ section.id }}" class="product-form__variants no-js">
+              {% for variant in product.variants %}
+                {% if variant.available %}
+                  <option {% if variant == product.selected_or_first_available_variant %} selected="selected" {% endif %} value="{{ variant.id }}">
+                    {{ variant.title }}
+                  </option>
+                {% else %}
+                  <option disabled="disabled">{{ variant.title }} - {{ 'products.product.sold_out' | t }}</option>
+                {% endif %}
+              {% endfor %}
+            </select>
+
+            {% if product.available and product.variants.size > 1 %}
+            {% for option in product.options %}
+            {% include 'swatch' with option %}
+            {% endfor %}
+            {% endif %}
+
+
+            {% if section.settings.show_quantity_selector %}
+              <div class="product-form__item product-form__item--quantity">
+                <label for="Quantity">{{ 'products.product.quantity' | t }}</label>
+                <input type="number" id="Quantity" name="quantity" value="1" min="1" class="product-form__input" pattern="[0-9]*">
+              </div>
+            {% endif %}
+
+            <div class="product-form__item product-form__item--submit">
+              <button type="submit" name="add" id="AddToCart-{{ section.id }}" {% unless current_variant.available %}disabled="disabled"{% endunless %} class="btn product-form__cart-submit{% if product.options.size == 1 and product.variants[0].title == 'Default Title' %} product-form__cart-submit--small{% endif %}">
+                <span id="AddToCartText-{{ section.id }}">
+                  {% unless current_variant.available %}
+                    {{ 'products.product.sold_out' | t }}
+                  {% else %}
+                    {{ 'products.product.add_to_cart' | t }}
+                  {% endunless %}
+                </span>
+              </button>
+            </div>
+          </form>
+          
+        </div>
+
+        <div id="cssmenu" class="product-single__description rte" itemprop="description">
+          
+          {{productdescription[1]}}
+        </div>
+
+        {% if section.settings.show_share_buttons %}
+          {% include 'social-sharing', share_title: product.title, share_permalink: product.url, share_image: product %}
+        {% endif %}
+      </div>
+    </div>
+    </div>
+         
+  </div>
+  <div class="grid big_bnner-pro">
+    
+    {% for image in product.images %}
+    {% if image.src contains "big-banner_" %}
+    <div class="box ratio-container"
+         data-bgset="{% include 'bgset', image: image.src %}"
+         data-sizes="auto"
+         data-parent-fit="cover"
+         style="background-position: center top;background-image: url('{{ image.src | img_url: 'master', scale: 2 }}');background-size: cover;">
+      <img class="product-single__thumbnail-image medium-up--hide small--hide" src="{{ image.src | img_url: 'master', scale: 2 }}" alt="{{ image.alt | escape }}">
+    </div>    {% endif %}
+    {% endfor %}
+ 
+
+    {% comment %}
+      {% if product.images.size > 1 %}
+            {% if product.images.size > 1 %}
+            {% for image in product.images %}
+            {% if image.src contains "big-banner_" %}
+            {%- assign enable_thumbnail_slides = true -%}
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+        <div class="grid__item thumbnails-wrapper{% if enable_thumbnail_slides == true %} thumbnails-slider--active{% endif %}">
+          {% if enable_thumbnail_slides == true %}
+            <button type="button" class="btn btn--link thumbnails-slider__btn thumbnails-slider__prev thumbnails-slider__prev--{{ section.id }}">
+              {% include 'icon-chevron-left' %}
+              <span class="icon__fallback-text">{{ 'sections.slideshow.previous_slide' | t }}</span>
+            </button>
+          {% endif %}
+          <ul class="grid grid--uniform product-single__thumbnails product-single__thumbnails-{{ section.id }}">
+            {% for image in product.images %}
+            {% if image.src contains "big-banner_" %}
+            <li class="grid__item product-single__thumbnails-item product_proimage js">
+              <div class="box ratio-container product-single__thumbnail--{{ section.id }}"
+                   data-bgset="{% include 'bgset', image: image.src %}"
+                   data-sizes="auto"
+                   data-parent-fit="cover"
+                   style="background-position: center top;background-image: url('{{ image.src | img_url: 'master', scale: 2 }});">
+                <img class="product-single__thumbnail-image medium-up--hide small--hide" src="{{ image.src | img_url: 'master', scale: 2 }}" alt="{{ image.alt | escape }}">
+              </div>
+
+            </li>
+            {% endif %}
+            {% comment %}
+              <li class="grid__item product-single__thumbnails-item js">
+                <a href="{{ image.src | img_url: product_image_zoom_size, scale: product_image_scale }}"
+                   class="text-link product-single__thumbnail product-single__thumbnail--{{ section.id }}"
+                   data-thumbnail-id="{{ image.id }}"
+                   {% if enable_zoom %}data-zoom="{{ image.src | img_url: product_image_zoom_size, scale: product_image_scale }}"{% endif %}>
+                     <img class="product-single__thumbnail-image" src="{{ image.src | img_url: 'master', scale: 2 }}" alt="{{ image.alt | escape }}">
+                </a>
+              </li>
+            {% endcomment %}
+            {% endfor %}
+          </ul>
+          {% if enable_thumbnail_slides == true %}
+            <button type="button" class="btn btn--link thumbnails-slider__btn thumbnails-slider__next thumbnails-slider__next--{{ section.id }}">
+              {% include 'icon-chevron-right' %}
+              <span class="icon__fallback-text">{{ 'sections.slideshow.next_slide' | t }}</span>
+            </button>
+          {% endif %}
+        </div>
+    
+      {% endif %}
+    {% endcomment %}
+  </div>
+  
+  <div id='judgeme_product_reviews' class='jdgm-widget jdgm-review-widget' data-product-title='{{ product.title }}' data-id='{{ product.id }}'>{{ product.metafields.judgeme.widget }}</div>
+
+</div>
+{% comment %}
+{% if collection %}
+  <div class="text-center return-link-wrapper">
+    <a href="{{ collection.url }}" class="btn btn--secondary btn--has-icon-before return-link">
+      {% include 'icon-arrow-left' %}
+      {{ 'products.product.back_to_collection' | t: title: collection.title }}
+    </a>
+  </div>
+{% endif %}
+{% endcomment %}
+
+{% unless product == empty %}
+  <script type="application/json" id="ProductJson-{{ section.id }}">
+    {{ product | json }}
+  </script>
+{% endunless %}
+<script>
+	$(document).ready(function () {
+		$(document).on("scroll", onScroll);
+ 
+		$('.main_image_prodct').find('a[href^="#"]').on('click', function (e) {
+			e.preventDefault();
+			$(document).off("scroll");
+ 
+			$('a').each(function () {
+				$(this).removeClass('active');
+			})
+			$(this).addClass('active');
+ 
+			var target = this.hash;
+			$target = $(target);
+			$('html, body').stop().animate({
+				'scrollTop': $target.offset().top+2
+			}, 500, 'swing', function () {
+				window.location.hash = target;
+				$(document).on("scroll", onScroll);
+			});
+		});
+	});
+ 
+	function onScroll(event){
+		var scrollPosition = $(document).scrollTop();
+		$('.main_image_prodct a').each(function () {
+			var currentLink = $(this);
+			var refElement = $(currentLink.attr("href"));
+			if (refElement.position().top <= scrollPosition && refElement.position().top + refElement.height() > scrollPosition) {
+				$('.main_image_prodct .pad_left_images a').removeClass("active");
+				currentLink.addClass("active");
+			}
+			else{
+				currentLink.removeClass("active");
+			}
+		});
+	}
+  $(document).on("touchstart click", ".product__description-short a", function(e) {
+    e.preventDefault();
+    $(this).parent().addClass("visually-hidden");
+    $(".product__description-full").removeClass("visually-hidden").hide().fadeIn(500);
+  });
+  $(document).on("touchstart click", ".product__description-full a", function(e) {
+    e.preventDefault();
+    $(this).parent().addClass("visually-hidden");
+    $(".product__description-short").removeClass("visually-hidden").hide().fadeIn(500);
+  });
+</script>
+{% schema %}
+  {
+    "name": "Product pages",
+    "settings": [
+      {
+        "type": "select",
+        "id": "image_size",
+        "label": "Image size",
+        "options": [
+          {
+            "value": "small",
+            "label": "Small"
+          },
+          {
+            "value": "medium",
+            "label": "Medium"
+          },
+          {
+            "value": "large",
+            "label": "Large"
+          },
+          {
+            "value": "full",
+            "label": "Full-width"
+          }
+        ],
+        "default": "medium"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_quantity_selector",
+        "label": "Show quantity selector",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "show_variant_labels",
+        "label": "Show variant labels",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_vendor",
+        "label": "Show vendor",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_zoom",
+        "label": "Enable image zoom",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_share_buttons",
+        "label": "Show social sharing buttons",
+        "default": true
+      }
+    ]
+  }
+{% endschema %}
+<script>
+$(document).ready(function(){
+
+  $('#cssmenu > ul > li:has(ul)').addClass("has-sub");
+
+  $('#cssmenu > ul > li > a').click(function() {
+    var checkElement = $(this).next();
+    
+    $('#cssmenu li').removeClass('active');
+    $(this).closest('li').addClass('active');	
+    
+    
+    if((checkElement.is('ul')) && (checkElement.is(':visible'))) {
+      $(this).closest('li').removeClass('active');
+      checkElement.slideUp('normal');
+    }
+    
+    if((checkElement.is('ul')) && (!checkElement.is(':visible'))) {
+      $('#cssmenu ul ul:visible').slideUp('normal');
+      checkElement.slideDown('normal');
+    }
+    
+    if (checkElement.is('ul')) {
+      return false;
+    } else {
+      return true;	
+    }		
+  });
+   $('.product-photo-slider').slick({
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  arrows: false,
+  fade: true,
+  asNavFor: '.multiple--image'
+});
+$('.multiple--image').slick({
+  slidesToShow: 4,
+  slidesToScroll: 1,
+  asNavFor: '.product-photo-slider',
+  dots: true,
+  centerMode: true,
+  focusOnSelect: true
+});
+});
+  </script>

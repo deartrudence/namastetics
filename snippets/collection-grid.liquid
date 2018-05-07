@@ -1,0 +1,103 @@
+<div class="grid-view-item{% unless product.available %} product-price--sold-out grid-view-item--sold-out{% endunless %}">
+  <a class="grid-view-item__link col_hover grid-view-item__image-container" href="{{ product.url | within: collection }}">
+    {% capture img_id %}ProductCardImage-{{ section.id }}-{{ product.id }}{% endcapture %}
+    {% capture wrapper_id %}ProductCardImageWrapper-{{ section.id }}-{{ product.id }}{% endcapture %}
+    {%- assign img_url = product.featured_image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+
+    {% unless product.featured_image == blank %}
+      {% include 'image-style' with image: product.featured_image, width: max_height, height: max_height, small_style: true, wrapper_id: wrapper_id, img_id: img_id %}
+    {% endunless %}
+
+    <div id="" class="grid-view-item__image-wrappers js imge__height prd_bx">
+      
+      <div id="overlay" class="overlay overlay_size">
+        {% unless product.variants[0].title == 'Default Title' %}
+        {% for option in product.options_with_values %}
+        {% unless option.name == 'Color' or option.name == 'color' %}
+        <div class="opt_main">
+          <div class="opt_name">{{ option.name}} **Quick Buy**</div>
+          {% for value in option.values %}
+          <div class="swatches-bx"><button class="size_btn{% unless product.variants[forloop.index0].available %} disabled strikethrough{% endunless %}" id="button_{{forloop.index}}{{product.id}}" data-cart-add="{{product.variants[forloop.index0].id}}" {% unless product.variants[forloop.index0].available %}disabled{% endunless %}>{{ value | escape }}</button></div>
+          <script type="text/javascript">
+            $('#button_{{forloop.index}}{{product.id}}').on( "click", function(e) {
+            var variant_id = $(this).data('cart-add');
+            e.preventDefault();
+            Shopify.addItem(variant_id,1);
+            Shopify.onItemAdded = function(line_item) {
+              console.log(line_item.title + ' was added to your shopping cart.');
+            };
+            setTimeout(function(){
+              jQuery.getJSON('/cart.js', function(cart) {               
+                $('#CartCount').find('.cart-count').html(cart.item_count);
+              });
+            }, 2000);
+            
+            $('#{{wrapper_id}}').find('.full-tick-anim').remove();
+            
+            $('#{{wrapper_id}}').append('<div class="full-tick-anim drawn"><div class="trigger"></div><svg version="1.1" id="tick" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 37 37" style="enable-background:new 0 0 37 37;" xml:space="preserve"><path class="circ path" style="fill:none;stroke:#000000;stroke-width:3;stroke-linejoin:round;stroke-miterlimit:10;" d="M30.5,6.5L30.5,6.5c6.6,6.6,6.6,17.4,0,24l0,0c-6.6,6.6-17.4,6.6-24,0l0,0c-6.6-6.6-6.6-17.4,0-24l0,0C13.1-0.2,23.9-0.2,30.5,6.5z"	/><polyline class="tick path" style="fill:none;stroke:#000000;stroke-width:3;stroke-linejoin:round;stroke-miterlimit:10;" points="11.6,20 15.9,24.2 26.4,13.8 "/></svg><span style="display:none;">Added to Cart</span></div>');
+ 
+            window.setTimeout(function () {
+              $(".trigger").toggleClass("drawn");
+              $(".full-tick-anim span").hide().fadeIn(1000);
+              $('.overlay_size').hide();
+            }, 250);
+
+            window.setTimeout(function () {
+              $(".full-tick-anim").fadeOut();
+              $('.overlay_size').hide().fadeIn(1000);
+            }, 2500);         
+
+            });
+          </script>
+          {% endfor %}
+        </div>
+        {% endunless %}
+        {% endfor %} 
+               {% endunless %}
+      </div>
+
+   
+      <div  id="reveal" class="reveal">
+      <div>
+      
+        <img id="{{ img_id }}-d"
+             class="grid-view-item__images lazyloads"
+             src="{{ product.featured_image | img_url: 'original' }}"
+             data-src="{{ img_url }}"
+             data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
+             data-aspectratio="{{ product.featured_image.aspect_ratio }}"
+             data-sizes="auto"
+             alt="{{ product.featured_image.alt | escape }}">
+      
+          <img 
+             class="hidden"
+             src="{{ product.images[1] | img_url: 'original' }}"
+             data-src="{{ img_url }}"
+             data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
+             data-aspectratio="{{ product.featured_image.aspect_ratio }}"
+             data-sizes="auto"
+             alt="{{ product.featured_image.alt | escape }}">
+              
+
+        </div>
+      </div>
+      
+    </div>
+
+    <noscript>
+      {% capture image_size %}{{ max_height }}x{{ max_height }}{% endcapture %}
+      <img class="grid-view-item__image" src="{{ product.featured_image.src | img_url: image_size, scale: 2 }}" alt="{{ product.featured_image.alt }}" >
+    </noscript>
+    <div class="pro_info coll-cen">
+    
+      <div class="h4 grid-view-item__title">{{ product.title }}</div>
+ 
+      {% if section.settings.show_vendor %}
+      <div class="grid-view-item__vendor">{{ product.vendor }}</div>
+      {% endif %}
+      <div class="grid-view-item__meta">
+        {% include 'product-price' %}
+      </div>
+    </div>
+  </a>
+</div>

@@ -1,0 +1,54 @@
+<div class="page-width feature-row">
+  {% capture image_layout %}
+    <div class="feature-row__item">
+      {% if settings.image2 != blank %}
+        {% capture img_id %}FeatureRowImage-{{ section.id }}{% endcapture %}
+        {% capture wrapper_id %}FeatureRowImageWrapper-{{ section.id }}{% endcapture %}
+        {%- assign img_url = settings.image2 | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+        {% include 'image-style' with image: settings.image2, width: 545, height: 545, small_style: true, wrapper_id: wrapper_id, img_id: img_id %}
+        <div id="{{ wrapper_id }}" class="feature-row__image-wrapper js">
+          <div style="padding-top:{{ 1 | divided_by: settings.image.aspect_ratio2 | times: 100}}%;">
+            <img id="{{ img_id }}"
+                 class="feature-row__image lazyload"
+                 src="{{ settings.image2 | img_url: '200x200' }}"
+                 data-src="{{ img_url }}"
+                 data-widths="[180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048]"
+                 data-aspectratio="{{ settings.image.aspect_ratio2 }}"
+                 data-sizes="auto"
+                 alt="{{ settings.image.alt2 | escape }}">
+          </div>
+        </div>
+
+        <noscript>
+          {{ settings.image2 | img_url: '600x600', scale: 2 | img_tag: section.settings.image.alt, 'feature-row__image' }}
+        </noscript>
+      {% else %}
+        {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+      {% endif %}
+    </div>
+  {% endcapture %}
+
+  <div class="feature-row">
+    {% if settings.layout2 == 'left' %}
+      {{ image_layout }}
+    {% endif %}
+
+    <div class="feature-row__item feature-row__text feature-row__text--{{ settings.layout2 }}">
+      {% if settings.title2 != blank %}
+        <h2 class="h3">{{ settings.title2 | escape }}</h2>
+      {% endif %}
+      {% if settings.text2 != blank %}
+        <div class="rte-setting featured-row__subtext">{{ settings.text2 }}</div>
+      {% endif %}
+      {% if settings.button_label2 != blank and settings.button_link2 != blank %}
+        <a href="{{ settings.button_link2 }}" class="btn">
+          {{ settings.button_label2 | escape }}
+        </a>
+      {% endif %}
+    </div>
+
+    {% if settings.layout2 == 'right' %}
+      {{ image_layout }}
+    {% endif %}
+  </div>
+</div>

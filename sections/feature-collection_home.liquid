@@ -1,0 +1,147 @@
+<div class="feature-coll">
+  
+    <div class="feature-coll-row__item feature_image">
+      {% for block in section.blocks %}
+      {% if block.settings.image != blank %}
+      <div class="desktop-only">
+      {% if block.settings.image != blank %}
+      <div class="feature-colm-img"><img class="feature_image_{{ forloop.index0 }}" src="{{ block.settings.image | img_url: '1366x753' }}">
+     <div class="col-info_{{ forloop.index0 }}">
+       {% if block.settings.heading_text != blank %}
+      <h2 class="heading-text_{{ forloop.index0 }}">{{block.settings.heading_text}}</h2>
+      {% endif %} 
+        {% if block.settings.subheading_text != blank %}
+      <p class="subheading-text_{{ forloop.index0 }}">{{block.settings.subheading_text}}</p>
+      {% endif %} 
+      {% if block.settings.button_link != blank %}
+      <a class="btn home_btn feature_btn_{{ forloop.index0 }}"href="{{block.settings.button_link}}">{{block.settings.btn_text}}</a>
+      {% endif %}
+        </div>
+      </div>
+      {% endif %}
+      </div>
+      {% endif %}
+       {% if block.settings.mob_image != blank %}
+      <div class="mobile-only mobile-banners">
+      {% if block.settings.mob_image != blank %}
+      <div class="feature-colm-imgs baner_images__{{ forloop.index0 }}"><img class="feature_images_{{ forloop.index0 }}" src="{{ block.settings.mob_image | img_url: 'master' }}">
+     
+     
+        <div class="col-info_{{ forloop.index0 }}">
+       {% if block.settings.mob_heading_text != blank %}
+      <h2 class="heading-text_{{ forloop.index0 }}">{{block.settings.mob_heading_text}}</h2>
+      {% endif %} 
+        {% if block.settings.mob_subheading_text != blank %}
+      <p class="subheading-text_{{ forloop.index0 }}">{{block.settings.mob_subheading_text}}</p>
+      {% endif %} 
+      {% if block.settings.mob_button_link != blank %}
+      <a class="btn home_btn feature_btn_{{ forloop.index0 }}"href="{{block.settings.mob_button_link}}">{{block.settings.mob_btn_text}}</a>
+       {% endif %}
+        </div>
+      </div>
+      {% endif %}
+      </div>
+      {% endif %}
+      {% endfor %}
+    </div>
+
+
+</div>
+
+{% schema %}
+  {
+    "name": "New Feature Collections",
+    "class": "index-section",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Image with text"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "text_block",
+        "name": "Column",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+          {
+            "type": "image_picker",
+            "id": "mobo_image",
+            "label": "Image"
+          },
+          
+           {
+            "type": "text",
+            "id": "subheading_text",
+            "label": "subheading Text"
+          },
+          {
+            "type": "url",
+            "id": "button_link",
+            "label": "Button link"
+          },
+           {
+            "type": "text",
+            "id": "btn_text",
+            "label": "Button Text"
+          },
+          {
+            "type": "header",
+            "content": "Mobile Content"
+          },
+          {
+            "type": "image_picker",
+            "id": "mob_image",
+            "label": "Image"
+          },
+          
+           {
+            "type": "text",
+            "id": "mob_subheading_text",
+            "label": "subheading Text"
+          },
+          {
+            "type": "url",
+            "id": "mob_button_link",
+            "label": "Button link"
+          },
+           {
+            "type": "text",
+            "id": "mob_btn_text",
+            "label": "Button Text"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "New Feature Collections",
+        "category": "Collection",
+        "blocks": [
+          {
+            "type": "text_block"
+          },
+          {
+            "type": "text_block"
+          },
+          {
+            "type": "text_block"
+          },
+        {
+        "type": "text_block"
+        },
+        {
+        "type": "text_block"
+        }
+           
+        ]
+      }
+    ]
+  }
+{% endschema %}

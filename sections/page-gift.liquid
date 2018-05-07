@@ -1,0 +1,92 @@
+<div class="gift">
+<img src="{{ section.settings.image-gift | img_url: '2048x' }}">
+</div>
+<div class="page-width">
+  <div class="grid">
+    <div class="grid__item small--text-center small-one--whole form-wdth medium-up--push-one-twelfth abslt">
+<!--       <div class="section-header text-center">
+        <h1>{{ page.title }}</h1>
+      </div> -->
+      <h4>{{ section.settings.main-text }}</h4>
+      <p>{{ section.settings.text-para }}</p>
+      <h5 class="mrgin">{{ section.settings.email-title }}</h5>
+<!--       <div class="rte">
+        {{ page.content }}
+      </div> -->
+      <form id="email_signup" class="klaviyo_styling klaviyo_standard_embed_MS47UD" action="//manage.kmail-lists.com/subscriptions/subscribe" data-ajax-submit="//manage.kmail-lists.com/ajax/subscriptions/subscribe" method="GET" target="_blank" novalidate="novalidate">
+        <input type="hidden" name="g" value="MS47UD">
+        <div class="klaviyo_field_group">
+          <!--           <label for="k_id_email">Newsletter Sign Up</label> -->
+          <input type="email" value="" name="email" id="k_id_email" placeholder="Enter Email Address" />
+        </div>
+        <div class="klaviyo_messages">
+          <div class="success_message" style="display:none;"></div>
+          <div class="error_message" style="display:none;"></div>
+        </div>
+        <div class="klaviyo_form_actions">
+          <button type="submit" class="klaviyo_submit_button">Submit</button>
+        </div>
+      </form>
+<style type="text/css">
+
+</style>
+<script type="text/javascript" src="//www.klaviyo.com/media/js/public/klaviyo_subscribe.js"></script>
+<script type="text/javascript">
+  KlaviyoSubscribe.attachToForms('#email_signup', {
+    hide_form_on_success: true
+  });
+</script>
+
+
+        <a href="{{ section.settings.link_url }}">
+          <h4>{{ section.settings.link_title }}</h4>
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Gift Page",
+    "class": "index-section index-section--flush",
+    "settings": [
+	  {
+        "type": "image_picker",
+        "id": "image-gift",
+        "label": "Image"
+      },
+	  {
+		"type": "text",
+        "id": "main-text",
+        "label": "Main text"
+	  },
+	  {
+		"type": "text",
+        "id": "text-para",
+        "label": "Text"
+	  },
+      {
+          "type": "text",
+          "id": "email-title",
+          "label": "Email Title"
+      },
+      {
+          "type": "text",
+          "id": "link_title",
+          "label": "Link Title"
+      },
+      {
+          "type": "text",
+          "id": "link_url",
+          "label": "Link Url"
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

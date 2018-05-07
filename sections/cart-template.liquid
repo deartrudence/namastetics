@@ -1,0 +1,333 @@
+  {% if cart.item_count > 0 %}
+
+<div class="cart-page" data-section-id="{{ section.id }}" data-section-type="cart-template">
+<div class="section-header text-center">
+  <h6 class="text-left purple"><a href="{{ shop.url }}"><span>&lsaquo;</span>&nbsp; Continue Shopping</a></h6>
+      <h1 class="crt text-left">{{ 'cart.general.title' | t }}</h1>
+    </div>
+  <div class="easy-exchange-area mobile-only">
+  <ul>
+    <li><img src="{{ 'easy.jpg' | asset_url }}"/><span>easy exchange</span></li>
+    <li><img src="{{ 'lock.jpg' | asset_url }}"/><span>secure</span></li>
+  </ul>
+  
+  </div>
+   <form action="/cart" method="post" novalidate class="cart">
+  <div class="medium-up--eight-twelfths cart_products medium--one-half">
+       
+      <table>
+        <thead class="cart__row cart__header">
+         
+          <th colspan="2">{{ 'cart.label.product' | t }}</th>
+          <th class="text-center">{{ 'cart.label.quantity' | t }}</th>
+          <th class="text-center">{{ 'cart.label.price' | t }}</th>
+<!--           <th class="text-right">{	{ 'cart.label.total' | t }}</th> -->
+        </thead>
+        <tbody>
+          {% for item in cart.items %}
+            <tr class="cart__row border-bottom line{{ forloop.index }} cart-flex{% if forloop.last %} last-row {% endif %}">
+              
+              <td class="cart__image-wrapper cart-flex-item">
+                <a href="{{ item.url | within: collections.all }}">
+                  <img class="cart__image" src="{{ item | img_url: 'master'}}" alt="{{ item.title | escape }}">
+                </a>
+              </td>
+              <td class="cart__meta small--text-left cart-flex-item crt-title">
+                <div class="list-view-item__title">
+                  <a href="{{ item.url }}">
+                    {{ item.product.title }}
+                    {% if item.quantity > 1 %}
+                      <span class=" small--hide medium-up--hide"><span class="visually-hidden">{{ 'cart.label.quantity' | t }}</span>(x{{ item.quantity }})</span>
+                    {% endif %}
+                  </a>
+                </div>
+                {% unless item.variant.title contains 'Default' %}
+                  <div class="cart__meta-text">
+                    {% for option in item.product.options %}
+                   {{ item.variant.options[forloop.index0] }}<br/>
+                    {% endfor %}
+                  </div>
+                {% endunless %}
+				<div class="medium-up--hide">
+                <div class="cart__qty crt-mob">
+                    <div class="sp-quantity">
+    <div class="sp-minus fff"> <a class="ddd qtyminus" href="#">-</a></div>
+    <div class="sp-input">
+  <input type="text" min="0" size="2" value="1" class="quntity-input" name="updates[]" id="updates_{{ item.id }}" value="{{ item.quantity }}" data-line-id="{{ forloop.index0 }}" {% if settings.limit_quantity and item.variant.inventory_management != blank and item.variant.inventory_quantity > 0 and item.variant.inventory_policy == "deny" %}max="{{ item.variant.inventory_quantity }}"{% endif %} />
+    </div>
+    <div class="sp-plus fff"> <a class="ddd qtyplus" href="#">+</a></div>
+</div>
+                </div>
+                  <a href="/cart/change?line={{ forloop.index }}&amp;quantity=0" class="btn btn--small btn--secondary cart__remove medium-up--hide">{{ 'cart.general.remove' | t }}</a>
+                </div>
+                {% comment %}
+                  Optional, loop through custom product line items if available
+
+                  Line item properties come in as having two parts. The first part will be passed with the default form,
+                  but p.last is the actual custom property and may be blank. If it is, don't show it.
+
+                  For more info on line item properties, visit:
+                    - http://docs.shopify.com/support/your-store/products/how-do-I-collect-additional-information-on-the-product-page-Like-for-a-monogram-engraving-or-customization
+                {% endcomment %}
+                {%- assign property_size = item.properties | size -%}
+                {% if property_size > 0 %}
+                  <div class="cart__meta-text">
+                    {% for p in item.properties %}
+                      {% unless p.last == blank %}
+                        {{ p.first }}:
+
+                        {% comment %}
+                          Check if there was an uploaded file associated
+                        {% endcomment %}
+                        {% if p.last contains '/uploads/' %}
+                          <a href="{{ p.last }}">{{ p.last | split: '/' | last }}</a>
+                        {% else %}
+                          {{ p.last }}
+                        {% endif %}
+                      {% endunless %}
+                    {% endfor %}
+                  </div>
+                {% endif %} 
+              </td>
+              <td class="cart__update-wrapper cart-flex-item text-right">
+                <a href="/cart/change?line={{ forloop.index }}&amp;quantity=0" class="btn btn--small btn--secondary cart__remove medium-up--hide">{{ 'cart.general.remove' | t }}</a>
+                <div class="cart__qty">
+             <div class="sp-quantitys">
+    <div class="sp-minus fff"> <a class="ddd qtyminus" href="">-</a></div>
+    <div class="sp-input">
+  <input type="text" min="0" size="2" value="1" class="quntity-input" name="updates[]" id="updates_{{ item.key }}" value="{{ item.quantity }}" data-line-id="{{ forloop.index }}" />
+    </div>
+    <div class="sp-plus fff"> <a class="ddd qtyplus" href="#">+</a></div>
+                     
+                  </div>
+                
+                  
+  <a href="/cart/change?line={{ forloop.index }}&amp;quantity=0" class="btn btn--small btn--secondary cart__remove ">{{ 'cart.general.remove' | t }}</a>                
+                </div>
+                
+                <input type="submit" name="update" class="btn btn--small cart__update medium-up--hide" value="{{ 'cart.general.update' | t }}">
+              </td>
+              <td class="cart__price-wrapper cart-flex-item text-center small--hide">
+                {{ item.price | money }}
+
+                {% for discount in item.discounts %}
+                  <div class="cart-item__discount medium-up--hide">{{ discount.title }}</div>
+                {% endfor %}
+
+                <div class="cart__edit medium-up--hide">
+                  <button type="button" class="btn btn--secondary btn--small js-edit-toggle cart__edit--active" data-target="line{{ forloop.index }}">
+                    <span class="cart__edit-text--edit">{{ 'cart.general.edit' | t }}</span>
+                    <span class="cart__edit-text--cancel">{{ 'cart.general.cancel' | t }}</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          <script>
+
+          </script>
+          {% endfor %}
+         
+        </tbody>
+
+      </table>
+  <div class="discount-code desktop-only">
+          Procced to checkout to apply giftcards and discount code
+          </div>
+   
+  {% else %}
+    <div class="empty-page-content text-center">
+      <h1>{{ 'cart.general.title' | t }}</h1>
+      <p class="cart--empty-message">{{ 'cart.general.empty' | t }}</p>
+      <div class="cookie-message">
+        <p>{{ 'cart.general.cookies_required' | t }}</p>
+      </div>
+      <a href="/" class="btn btn--has-icon-after cart__continue-btn">{{ 'general.404.link' | t }}{% include 'icon-arrow-right' %}</a>
+    </div>
+  {% endif %}
+</div>
+     
+     <div class="free-oder-promo mobile-only">
+       <p>Free shipping on domestic orders over <br/>$50</p>
+     
+     </div>
+     
+  <div class="medium-up--three-twelfths order-summery text-center medium--one-half">
+    
+      
+    <div class="order-summery-header">
+      <h1 class="crt border-bottom"><span class="desktop-only">Order Summary</span><span class="mobile-only">ORDER SUMMARY</span></h1>
+ </div>
+    <div class="subtotal">
+            <p class="cart_subtotal js-cart_subtotal center">
+           
+              <span class="cart__subtotal-title">{{ 'cart.general.subtotal' | t }}</span><span class="cart__subtotal">{{ cart.total_price | money }}</span>
+             
+            </p>
+
+            {% if section.settings.display_savings %}
+              <p class="cart_savings sale">
+                {% if total_saving > 0 %}
+                  <span class="right">
+                    <span class="money">{{ total_saving | money }}</span>
+                  </span>
+                  <span>{{ 'layout.general.savings' | t }}</span>
+                {% endif %}
+              </p>
+            {% endif %} 
+          </div>
+        <div class="grid">
+          {% if section.settings.cart_notes_enable %}
+            <div class="grid__item medium-up--one-half cart-note">
+              <label for="CartSpecialInstructions" class="cart-note__label small--text-center">{{ 'cart.general.note' | t }}</label>
+              <textarea name="note" id="CartSpecialInstructions" class="cart-note__input">{{ cart.note }}</textarea>
+            </div>
+          {% endif %}
+          <div class="grid__item text-right small--text-center{% if section.settings.cart_notes_enable %} medium-up--one-half{% endif %}">
+<!--             <div>
+              <span class="cart__subtotal-title">{{ 'cart.general.subtotal' | t }}</span>
+              <span class="cart__subtotal">{{ cart.total_price | money }}</span>
+            </div> -->
+            {% if cart.total_discounts > 0 %}
+              <div class="cart__savings">
+                {{ 'cart.general.savings' | t }}
+                <span class="cart__savings-amount">{{ cart.total_discounts | money }}</span>
+              </div>
+            {% endif %}
+           <div class="desktop-only free-ship">
+             <span>Free Shipping when you spend more than <spam style="font-family: 'opensans';">$75!</spam> </span>
+             <span>Free Returns and Exchanges.<a class="swym-wishlist" href="#swym-wishlist">
+      <i class="fa fa-heart-o" aria-hidden="true"></i>
+        
+        </a></span>
+            </div>
+            
+            
+<div class="checkout desktop-only"> 
+
+            <input type="submit" name="checkout" class="btn btn--small-wide" value="{{ 'cart.general.checkout' | t }}">
+             
+            </div>
+            
+           <div class="payment-method mobile-only">
+             <ul>
+               <li><input type="submit" name="checkout" class="btn btn--small-wide" value="Proceed to checkout">
+            
+               </li>
+                 
+               <li class="continue-shop"><a href="/collections/all">Continue Shopping</a></li>
+             </ul>
+            </div>
+          </div>
+        </div>
+    
+  </div>
+   </form>  
+</div>
+<style>
+.cart__row.cart__header {
+    background: #F6F6F6;
+}
+</style>
+<script>
+//   {% for item in cart.items %}
+//   $('#mobile-quantity-{{ item.id }}').on( 'change', function() {
+//     var quantity_box = $(this).find('option:selected').index();
+//   $('#updates_{{ item.id }}').prop('selectedIndex', quantity_box).trigger('change');
+
+//     });
+//   $('#updates_{{ item.id }}').on( 'change', function() {
+//     var quantity_box2 = $(this).find('option:selected').index();
+//   $('#mobile-quantity-{{ item.id }}').prop('selectedIndex', quantity_box2).trigger('change');
+
+//     });
+//   {% endfor %}
+ $(".ddd").on("click", function () {
+
+    var $button = $(this);
+    var oldValue = $button.closest('.sp-quantity').find("input.quntity-input").val();
+
+    if ($button.text() == "+") {
+        var newVal = parseFloat(oldValue) + 1;
+      
+    } else {
+        // Don't allow decrementing below zero
+        if (oldValue > 0) {
+            var newVal = parseFloat(oldValue) - 1;
+        } else {
+            newVal = 0;
+        }
+    }
+   
+  $button.closest('.sp-quantity').find("input.quntity-input").val(newVal);
+
+    $(".quntity-input").val(newVal, function() {
+    if($(this).val() != '' && isNumber($(this).val()) && $(this).val() > 0)
+    {
+    var price = $('.cart__price-wrapper .money').val() * 1;
+    var qty = $(this).val() * 1;
+    
+    var total = price * qty;
+    $('.cart__subtotal.money').html(total);
+    }
+    alert(total);
+});
+
+function isNumber(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+
+});
+  $(document).ready(function(){
+  var height = $('.template-cart form.cart').height();
+  $('.template-cart form.cart').css('height', height);
+
+  });
+
+$(document).scroll(function() {
+  var span = $('.template-cart form.cart'),
+    div = $('body.template-cart .order-summery'),
+    spanHeight = span.outerHeight(),
+    divHeight = div.height(),
+    spanOffset = span.offset().top + spanHeight,
+    divOffset = div.offset().top + divHeight;
+
+  if (spanOffset >= divOffset) {
+    span.addClass('bottom');
+    var windowScroll = $(window).scrollTop() + $(window).height() - 50;
+    if (spanOffset > windowScroll) {
+      span.removeClass('bottom');
+    }
+  }
+});
+
+
+
+
+
+
+
+
+  
+  
+  
+  </script>
+{% schema %}
+  {
+    "name": "Cart page",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "cart_notes_enable",
+        "label": "Enable cart notes",
+        "default": false
+      }
+    ]
+  }
+{% endschema %}
+
+
+
+
+
+
