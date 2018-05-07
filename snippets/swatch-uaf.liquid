@@ -1,0 +1,36 @@
+UAF SWATCH
+
+
+{% assign file_extension = 'png' %}
+{% assign collection = product.title | downcase | handleize %}
+
+{% assign current_option = option | downcase %}
+++++++++++{{ current_option }}++++++++++
+{% if current_option == 'color' %}
+  COLOR OPTION
+  {% for product in collections[collection].all_products%}
+      {% for field in product.metafields['color']%}
+        {%  assign value = field | first %}
+        <a href="{{product.url}}" style="background-image: url({{ value | handle | append: '.' | append: file_extension | asset_url }}); background-color: {{value}}">  
+          {{value}}
+        </a>
+      {% endfor %}
+  {% endfor %}
+   
+{% endif %}
+{% if current_option == 'size' %}
+  SIZE OPTION
+  {% for option in product.options_with_values %}
+    {% if option.name == 'Color' %}
+      <div>  
+        <strong>name:</strong>{{ option.name }} 
+         <strong>value:</strong>
+         <ul>    
+          {% for value in option.values %}
+           <li>{{value}}</li>
+          {% endfor %}
+         </ul>
+      </div>
+    {% endif %}
+  {% endfor %}   
+{% endif %}
