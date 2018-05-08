@@ -1,4 +1,10 @@
-<div data-section-id="{{ section.id }}" data-section-type="product" data-enable-history-state="true" itemscope itemtype="http://schema.org/Product">
+<style>
+  .uaf_product {
+    margin: 40px;
+  }
+</style>
+
+<div data-section-id="{{ section.id }}" data-section-type="product" data-enable-history-state="true" itemscope itemtype="http://schema.org/Product" class="uaf_product">
   UAF
   {%- assign current_variant = product.selected_or_first_available_variant -%}
   {%- assign featured_image = current_variant.featured_image | default: product.featured_image -%}
@@ -36,33 +42,9 @@
         {% for option in product.options %}
           {% include 'swatch-uaf' with option %}
         {% endfor %}
-        {% for option in product.options_with_values %}
-          <!-- THERE ARE OPTIONS
-          {{option.name}}
-          <div class="selector-wrapper js">
-            <label
-              {% if option.name == 'default' %}class="label-hidden"{% endif %}
-              for="SingleOptionSelector-{{ forloop.index0 }}">
-                {{ option.name }}
-            </label>
-
-            <select
-              id="SingleOptionSelector-{{ forloop.index0 }}"
-              data-single-option-selector
-              data-index="option{{ option.position }}">
-              {% for value in option.values %}
-                <option
-                  value="{{ value | escape }}"
-                  {% if option.selected_value == value %}selected="selected"{% endif %}>
-                    {{ value }}
-                </option>
-              {% endfor %}
-            </select>
-          </div> -->
-        {% endfor %}
       {% endunless %}
 
-      <select name="id" class="no-js" data-product-select>
+  <!--     <select name="id" class="no-js" data-product-select>
         {% for variant in product.variants %}
           <option
             {% if variant == current_variant %}selected="selected"{% endif %}
@@ -71,7 +53,7 @@
               {{ variant.title }}
           </option>
         {% endfor %}
-      </select>
+      </select> -->
 
       <label for="Quantity">{{ 'products.product.quantity' | t }}</label>
       <input type="number" id="Quantity" name="quantity" value="1" min="1">

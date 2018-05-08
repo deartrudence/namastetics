@@ -169,6 +169,7 @@ Shopify.addItem = function(variant_id, quantity, callback) {
     - Allow custom error callback
 ==============================================================================*/
 Shopify.addItemFromForm = function(form, callback, errorCallback) {
+	console.log(jQuery(form).serialize())
   $('#AddToCartText-product-template').html('Adding...');
   var params = {
     type: 'POST',
@@ -661,6 +662,8 @@ var ajaxifyShopify = (function(module, $) {
 
       // Remove any previous quantity errors
       $('.qty-error').remove();
+      console.log(e.target)
+      console.log('TARGET <<<<<<<<<<<<<<<<<')
 
       Shopify.addItemFromForm(e.target, itemAddedCallback, itemErrorCallback);
 
