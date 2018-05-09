@@ -2,44 +2,37 @@
 {% assign collection = product.title | downcase | handleize %}
 
 {% assign current_option = option | downcase %}
-{% if current_option == 'color' %}
-  <div>
-    <span>
-      {% for field in product.metafields['color'] %}
-        {{ field | first }}
-      {% endfor %}
-    </span>
-    {% for product in collections[collection].all_products%}
-        {% for field in product.metafields['color']%}
-          {%  assign value = field | first %}
-          <a href="{{product.url}}" style="background-image: url({{ value | handle | append: '.' | append: file_extension | asset_url }}); background-color: {{value}}">  
-            {{value}}
-          </a>
-        {% endfor %}
+
+<div class="swatch-color-container">
+  <span>
+    {% for field in product.metafields['color'] %}
+      {% assign current_color = field | first %}
+      {{ current_color }}
     {% endfor %}
-  </div>
-{% endif %}
-{% if current_option == 'size' %}
-  SIZE OPTION
-  {% for option in product.options_with_values %}
-    {% if option.name == 'Size' %}
-      <div>  
-        <strong>name:</strong>{{ option.name }} 
-         <strong>value:</strong>
-         <ul>    
-          {% for value in option.values %}
-            <input 
-            type="radio" 
-            name="{{option.name}}" 
-            value="{{ value | escape }}"
-            id="{{option.name | handleize}}-{{value | escape | handleize}}"
-            data-single-option-selector
-            data-index="option{{ option.position }}">
-            <label for="{{option.name | handleize}}-{{value | escape | handleize}}" class="{{option.name | downcase}}"
-              >{{value}}</label>
-          {% endfor %}
-         </ul>
-      </div>
-    {% endif %}
-  {% endfor %}   
-{% endif %}
+  </span>
+  {% for product in collections[collection].all_products%}
+      {% for field in product.metafields['color']%}
+        {%  assign value = field | first %}
+        <a href="{{product.url}}" style="background-image: url({{ value | handle | append: '.' | append: file_extension | asset_url }}); background-color: {{value}}" class="swatch-color {% if value == current_color %}selected {% endif %}">  
+        </a>
+      {% endfor %}
+  {% endfor %}
+</div>
+
+<div class="swatch-size-container">  
+  <strong>name:</strong>{{ option.name }} 
+   <strong>value:</strong>
+   <ul>    
+    {% for variant in product.variants %}
+      <input 
+      type="radio" 
+      name="id" 
+      value="{{ variant.id}}"
+      id="{{variant.title | handleize}}-{{value | escape | handleize}}"
+      data-single-option-selector
+      data-index="option{{ variant.position }}">
+      <label for="{{variant.title | handleize}}-{{value | escape | handleize}}" class="{{variant.title | downcase}}"
+        >{{variant.title}}</label>
+    {% endfor %}
+   </ul>
+</div>
