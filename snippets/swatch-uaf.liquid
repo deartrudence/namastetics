@@ -3,13 +3,13 @@
 
 {% assign current_option = option | downcase %}
 
+<span class="variant-title color">
+  {% for field in product.metafields['color'] %}
+    {% assign current_color = field | first %}
+    {{ current_color }}
+  {% endfor %}
+</span>
 <div class="swatch-color-container">
-  <span>
-    {% for field in product.metafields['color'] %}
-      {% assign current_color = field | first %}
-      {{ current_color }}
-    {% endfor %}
-  </span>
   {% for product in collections[collection].all_products%}
       {% for field in product.metafields['color']%}
         {%  assign value = field | first %}
@@ -18,10 +18,8 @@
       {% endfor %}
   {% endfor %}
 </div>
-
+<span class="variant-title size">Size</span>
 <div class="swatch-size-container">  
-  <strong>name:</strong>{{ option.name }} 
-   <strong>value:</strong>
    <ul>    
     {% for variant in product.variants %}
       <input 
